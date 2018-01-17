@@ -1,0 +1,4 @@
+*.swp
+.project
+.pydevproject
+__pycache__/
