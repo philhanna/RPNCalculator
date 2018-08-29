@@ -7,14 +7,9 @@
 #  USAGE:            ev [expression]
 #  -----------------------------------------------------------------
 
-try:
-    from . import toplevel
-except SystemError:
-    print("Ignoring import of toplevel")
 import math
 import os
 import os.path
-import pdb
 import re
 import sys
 from EVHelp import EVHelp
