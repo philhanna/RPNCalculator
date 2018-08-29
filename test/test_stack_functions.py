@@ -1,10 +1,6 @@
-#! /usr/bin/python3
-
 import unittest
-import sys
-import os.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from Evaluator import Evaluator
+
 
 class TestStackFunctions(unittest.TestCase):
 
@@ -45,6 +41,3 @@ class TestStackFunctions(unittest.TestCase):
     def test_swap(self):
         self.ev.ev("10 20 30 swap")
         self.assertListEqual(self.ev.stack, [10, 30, 20])
-
-if __name__ == '__main__':
-    unittest.main()

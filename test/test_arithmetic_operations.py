@@ -1,10 +1,7 @@
-#! /usr/bin/python3
-
 import unittest
-import sys
-import os.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+
 from Evaluator import Evaluator
+
 
 class TestArithmeticOperations(unittest.TestCase):
 
@@ -92,6 +89,3 @@ class TestArithmeticOperations(unittest.TestCase):
         expected = 8
         actual = self.ev.pop()
         self.assertEqual(expected, actual)
-
-if __name__ == '__main__':
-    unittest.main()

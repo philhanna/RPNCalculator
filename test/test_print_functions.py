@@ -1,11 +1,7 @@
-#! /usr/bin/python3
-
 import unittest
-import sys
 import math
-import os.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from Evaluator import Evaluator
+
 
 class TestPrintFunctions(unittest.TestCase):
 
@@ -36,6 +32,3 @@ class TestPrintFunctions(unittest.TestCase):
         expected = 0
         self.assertEqual(expected, actual)
 
-
-if __name__ == '__main__':
-    unittest.main()

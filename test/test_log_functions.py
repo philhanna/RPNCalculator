@@ -1,9 +1,5 @@
-#! /usr/bin/python3
-
 import unittest
-import sys
-import os.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
+
 from Evaluator import Evaluator
 
 class TestLogFunctions(unittest.TestCase):
@@ -31,6 +27,3 @@ class TestLogFunctions(unittest.TestCase):
         actual = self.ev.pop()
         expected = 0.301029995663981
         self.assertAlmostEqual(expected, actual)
-
-if __name__ == '__main__':
-    unittest.main()

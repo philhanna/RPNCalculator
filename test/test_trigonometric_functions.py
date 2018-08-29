@@ -1,13 +1,8 @@
-#! /usr/bin/python3
-
 import unittest
-import sys
-import os.path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.realpath(__file__))))
 from Evaluator import Evaluator
 
-class TestTrigonometricFunctions(unittest.TestCase):
 
+class TestTrigonometricFunctions(unittest.TestCase):
     pi = 3.14159265358979
 
     def setUp(self):
@@ -63,6 +58,3 @@ class TestTrigonometricFunctions(unittest.TestCase):
         actual = self.ev.pop()
         expected = 0.2419218956
         self.assertAlmostEqual(expected, actual)
-
-if __name__ == '__main__':
-    unittest.main()
