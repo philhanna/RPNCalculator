@@ -21,6 +21,7 @@ After cloning the project from GitHub, run the command:
 ```bash
 sudo python3 setup.py install
 ```
+Then copy the mainline `ev` to a directory in your path.
 
 ## Commands by category
 * Arithmetic operations:   `+`, `-`, `*`, `/`, `%`, `**`, `1+`, `1-`, `int`, `sqrt`
