@@ -1,9 +1,9 @@
-from setuptools import setup
+from distutils.core import setup
 
 setup(
     name='RPNCalculator',
     version='1.2.0',
-    packages=['', 'test'],
+    packages=['evaluator', 'evaluator.test'],
     url='https://github.com/philhanna/RPNCalculator',
     license='',
     author='Phil Hanna',

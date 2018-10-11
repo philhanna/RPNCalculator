@@ -1,7 +1,11 @@
 #! /usr/bin/python3
 
 import sys
-from evaluator.Evaluator import Evaluator
 
+print("sys.path:")
+for p in sys.path:
+    print("\t{}".format(p))
+
+from evaluator.Evaluator import Evaluator
 app = Evaluator()
 app.run(sys.argv[1:])

@@ -1,5 +1,3 @@
-#! /usr/bin/python3
-
 #  -----------------------------------------------------------------
 #  MODULE NAME:      Evaluator
 #  DESCRIPTION:      Interactive RPN calculator
@@ -12,7 +10,8 @@ import os
 import os.path
 import re
 import sys
-from EVHelp import EVHelp
+from evaluator.EVHelp import EVHelp
+
 
 def stackNeeds(n):
     """ Decorator for stack checking """
@@ -711,10 +710,3 @@ class Evaluator:
 
     def push(self, value):
         self.stack.append(value)
-
-
-if __name__ == '__main__':
-    test = 0
-    if test == 0:
-        evaluator = Evaluator()
-        evaluator.run(sys.argv[1:])
