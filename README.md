@@ -15,6 +15,13 @@ To see a list of topics, type `help topics`.
 
 To exit from ev, type `q`;
 
+## Installation and setup
+
+After cloning the project from GitHub, run the command:
+```bash
+sudo python3 setup.py install
+```
+
 ## Commands by category
 * Arithmetic operations:   `+`, `-`, `*`, `/`, `%`, `**`, `1+`, `1-`, `int`, `sqrt`
 * Commands:                `help`, `load`, `quit`, `save`, `shell`

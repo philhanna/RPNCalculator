@@ -1,6 +1,6 @@
 import unittest
 import math
-from Evaluator import Evaluator
+from evaluator.Evaluator import Evaluator
 
 
 class TestPrintFunctions(unittest.TestCase):

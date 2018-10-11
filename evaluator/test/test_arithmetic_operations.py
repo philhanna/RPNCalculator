@@ -1,6 +1,6 @@
 import unittest
 
-from Evaluator import Evaluator
+from evaluator.Evaluator import Evaluator
 
 
 class TestArithmeticOperations(unittest.TestCase):

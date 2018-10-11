@@ -1,5 +1,5 @@
 import unittest
-from Evaluator import Evaluator
+from evaluator.Evaluator import Evaluator
 
 
 class TestStackFunctions(unittest.TestCase):
