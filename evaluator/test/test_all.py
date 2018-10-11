@@ -1,10 +1,10 @@
 import unittest
 
-from test_arithmetic_operations import TestArithmeticOperations
-from test_log_functions import TestLogFunctions
-from test_print_functions import TestPrintFunctions
-from test_stack_functions import TestStackFunctions
-from test_trigonometric_functions import TestTrigonometricFunctions
+from evaluator.test.test_arithmetic_operations import TestArithmeticOperations
+from evaluator.test.test_log_functions import TestLogFunctions
+from evaluator.test.test_print_functions import TestPrintFunctions
+from evaluator.test.test_stack_functions import TestStackFunctions
+from evaluator.test.test_trigonometric_functions import TestTrigonometricFunctions
 
 def suite():
     """
