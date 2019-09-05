@@ -15,7 +15,7 @@ class TestPrintFunctions(unittest.TestCase):
         self.ev.ev('format "%0.5f"')
         self.ev.ev('2 log ')
         x = self.ev.pop()
-        actual = self.ev.fmtval(x)
+        actual = self.ev.format_value(x)
         expected = "%0.5f" % (math.log10(2))
         self.assertEqual(expected, actual)
 
@@ -23,7 +23,7 @@ class TestPrintFunctions(unittest.TestCase):
         self.ev.ev('format "0x%04x"')
         self.ev.ev('50')
         x = self.ev.pop()
-        actual = self.ev.fmtval(x)
+        actual = self.ev.format_value(x)
         expected = "0x0032"
         self.assertEqual(expected, actual)
 

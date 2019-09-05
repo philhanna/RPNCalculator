@@ -14,7 +14,7 @@ class TestArithmeticOperations(unittest.TestCase):
     def test_add(self):
         ev = self.ev
         ev.ev('2 3')
-        ev.doAdd()
+        ev.do_add()
         expected = 5
         actual = ev.pop()
         self.assertEqual(expected, actual)
@@ -22,7 +22,7 @@ class TestArithmeticOperations(unittest.TestCase):
     def test_sub(self):
         ev = self.ev
         ev.ev('3 5')
-        ev.doSub()
+        ev.do_sub()
         expected = -2
         actual = ev.pop()
         self.assertEqual(expected, actual)

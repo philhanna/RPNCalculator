@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='RPNCalculator',
-    version='1.2.0',
+    version='1.2.1',
     packages=['evaluator', 'evaluator.test'],
     url='https://github.com/philhanna/RPNCalculator',
     license='',
