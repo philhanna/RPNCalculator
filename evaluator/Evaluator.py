@@ -349,15 +349,16 @@ class Evaluator:
 
     def do_format(self, new_format):
 
-        #   If no parameter, restore default value
+        #   If no parameter, show current value
 
         if not new_format:
-            self.fmtstr = Evaluator.FMTSTR
+            print(self.fmtstr)
             return
 
         #   Shortcuts
 
         shortcuts = {
+            'default': Evaluator.FMTSTR,
             'hex': '0x%x',
             'hex8': '0x%08x',
             'hex4': '0x%04x',
