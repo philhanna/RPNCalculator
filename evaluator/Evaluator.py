@@ -5,6 +5,7 @@
 #  USAGE:            ev [expression]
 #  -----------------------------------------------------------------
 
+import argparse
 import math
 import os
 import os.path
@@ -72,17 +73,34 @@ class Evaluator:
         self.fmtstr = Evaluator.FMTSTR
         self.helptext = {}
 
-        #   Load the profile, if any
-
-        self.load_profile()
-
     def run(self, args):
         """
             Mainline
         """
-        if args:
-            line = ' '.join(args)
-            self.ev(line)
+        parser = argparse.ArgumentParser(description='ev')
+        parser.add_argument('-v', '--version', action='store_true',
+                            help='display version number')
+        parser.add_argument('-c', help='Execute commands before entering main loop')
+        parser.add_argument('--noprofile', action='store_true',
+                            help='Do not load profile from .evrc')
+        args = parser.parse_args()
+        if args.version:
+            version = Evaluator.get_version()
+            print(f"Version={version}")
+            sys.exit()
+
+        #   Load the profile, if any
+
+        if not args.noprofile:
+            self.load_profile()
+
+        #   Run any command line tokens
+
+        if args.c:
+            self.ev(args.c)
+
+        #   Main loop
+
         while True:
             line = input(Evaluator.PROMPT)
             self.ev(line)
@@ -713,3 +731,17 @@ class Evaluator:
 
     def push(self, value):
         self.stack.append(value)
+
+    @staticmethod
+    def get_version():
+        import subprocess
+        version = None
+        cp = subprocess.run(['pip', 'show', 'RPNCalculator'], stdout=subprocess.PIPE)
+        if cp.returncode == 0:
+            output = str(cp.stdout, encoding='utf-8')
+            for token in output.split('\n'):
+                m = re.match(r'^Version: (.*)', token)
+                if m:
+                    version = m.group(1)
+                    break
+        return version
