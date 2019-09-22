@@ -113,6 +113,9 @@ class Evaluator:
         if not command:
             return
 
+        if command[0] == '#':
+            return
+
         #   Check for full line commands
 
         tokens = command.split()
