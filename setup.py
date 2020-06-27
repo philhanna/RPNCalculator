@@ -1,12 +1,13 @@
-from distutils.core import setup
+from setuptools import setup
 
 setup(
     name='RPNCalculator',
-    version='1.3.0',
-    packages=['evaluator', 'evaluator.test'],
-    url='https://github.com/philhanna/RPNCalculator',
-    license='',
+    version='1.4.0',
+    description='Interactive Forth-like calculator',
     author='Phil Hanna',
     author_email='ph1204@gmail.com',
-    description='Interactive Forth-like calculator'
+    license='MIT',
+    packages=['evaluator', 'evaluator.test'],
+    url='https://github.com/philhanna/RPNCalculator',
+    zip_safe=False
 )
