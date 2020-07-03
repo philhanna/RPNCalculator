@@ -1,16 +1,10 @@
-#  -----------------------------------------------------------------
-#  MODULE NAME:      Evaluator
-#  DESCRIPTION:      Interactive RPN calculator
-#  AUTHOR:           Phil Hanna
-#  USAGE:            ev [expression]
-#  -----------------------------------------------------------------
-
 import argparse
 import math
 import os
 import os.path
 import re
 import sys
+
 from evaluator.EVHelp import EVHelp
 
 
@@ -31,15 +25,15 @@ def stack_needs(n):
 
 
 class Evaluator:
-    #   Constants
+    """ Interactive RPN calulator """
 
+    #   Constants
     E = 2.718281828459045
     FMTSTR = "%f"
     PI = 3.141592653589793
     PROMPT = "ev> "
 
     #   Error messages
-
     MSG = {
         "BAD_CONST": "Invalid syntax - should be 'const <name> <value>'",
         "BAD_CONSTP": "Invalid syntax - should be 'const <name> <statements>'",
@@ -62,9 +56,8 @@ class Evaluator:
         "VAR_SAVED": "{} variable definitions saved to {}",
     }
 
-    #   Constructor
-
     def __init__(self):
+        """ Creates a new Evaluator class """
         self.stack = []
         self.constant = {}
         self.function = {}
@@ -74,8 +67,7 @@ class Evaluator:
         self.helptext = {}
 
     def run(self, args):
-        """
-            Mainline
+        """ Mainline
         """
         parser = argparse.ArgumentParser(description="""
 `ev` is an interactive programmable RPN calculator.  (Enter "help RPN"
@@ -105,24 +97,20 @@ To exit from ev, enter "q"
             sys.exit()
 
         #   Load the profile, if any
-
         if not args.noprofile:
             self.load_profile()
 
         #   Run any command line tokens
-
         if args.c:
             self.ev(args.c)
 
         #   Main loop
-
         while True:
             line = input(Evaluator.PROMPT)
             self.ev(line)
 
     def ev(self, command):
-        """
-            Evaluates input line
+        """ Evaluates input line
         """
 
         if not command:
@@ -132,7 +120,6 @@ To exit from ev, enter "q"
             return
 
         #   Check for full line commands
-
         tokens = command.split()
         kwd = tokens[0].upper()
         rest = " ".join(tokens[1:])
@@ -160,10 +147,8 @@ To exit from ev, enter "q"
             return
 
         #   Evaluate each token
-
         for token in tokens:
             token = token.upper()
-
             if token in ['Q', 'QUIT', 'EXIT']:
                 sys.exit(0)
             elif token in self.variable:
@@ -303,9 +288,7 @@ To exit from ev, enter "q"
         self.stack = []
 
     def do_const(self, line):
-
         """ Defines a constant """
-
         tokens = line.split()
         if len(tokens) < 2:
             print(Evaluator.MSG["BAD_CONST"])
@@ -386,13 +369,11 @@ To exit from ev, enter "q"
     def do_format(self, new_format):
 
         #   If no parameter, show current value
-
         if not new_format:
             print(self.fmtstr)
             return
 
         #   Shortcuts
-
         shortcuts = {
             'default': Evaluator.FMTSTR,
             'hex': '0x%x',
@@ -409,12 +390,10 @@ To exit from ev, enter "q"
             return
 
         #   Remove quotes if there are any
-
         new_format = re.sub(r"""['"]""", '', new_format)
 
         #   Validate according to
         #   docs.python.org/2/library/stdtypes.html#string-formatting
-
         m = re.search((
             r'%'
             r'[#0\- +]*'
@@ -427,10 +406,10 @@ To exit from ev, enter "q"
             return
 
         #   Assign the new format
-
         self.fmtstr = new_format
 
-    def do_help(self, topic):
+    @staticmethod
+    def do_help(topic):
         EVHelp(topic)
 
     @stack_needs(1)
@@ -529,17 +508,14 @@ To exit from ev, enter "q"
         """
 
         #   Remove quotes from filename, if present
-
         filename = re.sub('"', '', filename)
 
         #   Return if nothing to save
-
         if (not self.function and not self.constant and not self.variable):
             print(Evaluator.MSG["NO_SAVE"])
             return
 
         #   Open the output file
-
         if not filename:
             print(Evaluator.MSG["NO_FILENAME"])
             return
@@ -547,7 +523,6 @@ To exit from ev, enter "q"
         with open(filename, "wt") as OFILE:
 
             #   Save constants
-
             if self.constant:
                 for cname in sorted(self.constant):
                     OFILE.write("const {name} {value}\n".format(
@@ -560,7 +535,6 @@ To exit from ev, enter "q"
                 ))
 
             #   Save variables (both definitions and values)
-
             if self.variable:
                 names = [name for name in sorted(self.variable)]
                 OFILE.write("var {names}\n".format(
@@ -580,7 +554,6 @@ To exit from ev, enter "q"
                 ))
 
             #   Save the function definitions
-
             if self.function:
                 for fname in sorted(self.function):
                     OFILE.write("define {name} {body}\n".format(
@@ -593,10 +566,10 @@ To exit from ev, enter "q"
                 ))
 
             #   Save the format string
-
             OFILE.write('format "{}"\n'.format(self.fmtstr))
 
-    def do_shell(self):
+    @staticmethod
+    def do_shell():
         """ Invokes a command line shell """
         if sys.platform.startswith("win"):
             os.system("cmd /k")
@@ -714,7 +687,8 @@ To exit from ev, enter "q"
         output = re.sub(r'\.$', '', output)
         return output
 
-    def get_numeric_value(self, arg):
+    @staticmethod
+    def get_numeric_value(arg):
         try:
             return float(arg)
         except ValueError:
@@ -725,7 +699,8 @@ To exit from ev, enter "q"
             print("{} is not numeric".format(arg))
             return None
 
-    def is_numeric(self, arg):
+    @staticmethod
+    def is_numeric(arg):
         try:
             float(arg)
             return True

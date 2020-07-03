@@ -1,5 +1,6 @@
-import unittest
 import math
+import unittest
+
 from evaluator.Evaluator import Evaluator
 
 
@@ -31,4 +32,3 @@ class TestPrintFunctions(unittest.TestCase):
         actual = self.ev.pop()
         expected = 0
         self.assertEqual(expected, actual)
-

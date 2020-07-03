@@ -2,6 +2,7 @@ import unittest
 
 from evaluator.Evaluator import Evaluator
 
+
 class TestLogFunctions(unittest.TestCase):
 
     def setUp(self):
