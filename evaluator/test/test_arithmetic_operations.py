@@ -1,6 +1,8 @@
 import unittest
+from io import StringIO
 
 from evaluator.Evaluator import Evaluator
+from evaluator.test import stdout_redirected
 
 
 class TestArithmeticOperations(unittest.TestCase):
@@ -89,3 +91,12 @@ class TestArithmeticOperations(unittest.TestCase):
         expected = 8
         actual = self.ev.pop()
         self.assertEqual(expected, actual)
+
+    def test_empty_stack(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                ev = self.ev
+                ev.ev('2')
+                ev.do_add()
+                output = fp.getvalue()
+        self.assertIn("Stack empty", output)
