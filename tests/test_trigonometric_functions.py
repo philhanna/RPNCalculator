@@ -59,3 +59,9 @@ class TestTrigonometricFunctions(unittest.TestCase):
         actual = self.ev.pop()
         expected = 0.2419218956
         self.assertAlmostEqual(expected, actual)
+
+    def test_tan(self):
+        self.ev.ev("45 toRadians tan")
+        actual = self.ev.pop()
+        expected = 1
+        self.assertAlmostEqual(expected, actual)
