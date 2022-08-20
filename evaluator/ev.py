@@ -1,8 +1,8 @@
+import sys
 import math
 import os
 import os.path
 import re
-import sys
 
 from evaluator.ev_help import EVHelp
 
@@ -21,6 +21,9 @@ def stack_needs(n):
         return wrapper
 
     return decorator
+
+
+EXIT = "EXIT"
 
 
 class Evaluator:
@@ -95,7 +98,7 @@ To exit from ev, enter "q"
         if args.version:
             version = Evaluator.get_version()
             print(f"Version={version}")
-            sys.exit()
+            return EXIT
 
         #   Load the profile, if any
         if not args.noprofile:
@@ -108,9 +111,11 @@ To exit from ev, enter "q"
         #   Main loop
         while True:
             line = input(Evaluator.PROMPT)
-            self.ev(line)
+            rc = self.ev(line)
+            if rc == EXIT:
+                break
 
-    def ev(self, command):
+    def ev(self, command) -> str | None:
         """ Evaluates input line
         """
 
@@ -151,7 +156,7 @@ To exit from ev, enter "q"
         for token in tokens:
             token = token.upper()
             if token in ['Q', 'QUIT', 'EXIT']:
-                sys.exit(0)
+                return EXIT
             elif token in self.variable:
                 value = self.variable[token]
                 value = float(value)
@@ -698,7 +703,7 @@ To exit from ev, enter "q"
                 hexstring = m.group(1)
                 return float.fromhex(hexstring)
             print("{} is not numeric".format(arg))
-            return None
+            return
 
     @staticmethod
     def is_numeric(arg):
