@@ -14,6 +14,16 @@ def stdout_redirected(new_stdout):
         sys.stdout = save_stdout
 
 
+@contextmanager
+def stdin_redirected(new_stdin):
+    save_stdin = sys.stdin
+    sys.stdin = new_stdin
+    try:
+        yield None
+    finally:
+        sys.stdin = save_stdin
+
+
 __all__ = [
-    'stdout_redirected',
+    'stdout_redirected', 'stdin_redirected',
 ]
