@@ -512,7 +512,7 @@ To exit from ev, enter "q"
         filename = re.sub('"', '', filename)
 
         #   Return if nothing to save
-        if (not self.function and not self.constant and not self.variable):
+        if not self.function and not self.constant and not self.variable:
             print(Evaluator.MSG["NO_SAVE"])
             return
 
