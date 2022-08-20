@@ -1,8 +1,3 @@
-#! /usr/bin/python3
-
-import sys
-
-
 class EVHelp:
     helptext = {
         "overview": """
@@ -357,19 +352,3 @@ fmtstr: Prints the current format string
             return
         text = EVHelp.helptext[lctopic]
         print(text)
-
-
-#   ============================================================
-#   Mainline
-#   ============================================================
-if __name__ == '__main__':
-
-    if len(sys.argv) > 1:
-        topic = sys.argv[1]
-        EVHelp(topic)
-    print("(Enter qq to exit help)")
-    while True:
-        topic = input("topic> ")
-        if topic == 'qq':
-            break
-        EVHelp(topic)
