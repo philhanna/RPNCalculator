@@ -1,4 +1,3 @@
-import argparse
 import math
 import os
 import os.path
@@ -66,9 +65,11 @@ class Evaluator:
         self.fmtstr = Evaluator.FMTSTR
         self.helptext = {}
 
-    def run(self, args):
+    def run(self):
         """ Mainline
         """
+        import argparse
+
         parser = argparse.ArgumentParser(description="""
 `ev` is an interactive programmable RPN calculator.  (Enter "help RPN"
 for details about Reverse Polish Notation.)  It reads blank-delimited 

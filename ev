@@ -4,4 +4,4 @@ import sys
 from evaluator import Evaluator
 
 app = Evaluator()
-app.run(sys.argv[1:])
+app.run()
