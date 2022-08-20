@@ -2,9 +2,10 @@
 
 import sys
 
+
 class EVHelp:
     helptext = {
-    "overview" : """
+        "overview": """
 OVERVIEW: 
 
 ev is an interactive programmable RPN calculator.  (Type 'help RPN' 
@@ -22,7 +23,7 @@ function definitions.  It also allows save and restore operations.
 
    To exit from ev, type 'q';
 """,
-    "topics" : """
+        "topics": """
 Arithmetic operations:   +, -, *, /, %, **, 1+, 1-, int, sqrt
 Commands:                help, load, quit, save, shell
 Configuration:           profile
@@ -36,7 +37,7 @@ Stack functions:         clear, depth, drop, dup, over, rot, swap
 Trigonometric functions: acos, asin, atan, atan2, cos, sin, tan
 """,
 
-    "rpn" : """
+        "rpn": """
 
 Reverse Polish Notation (RPN) is a syntax for writing
 arithmetic expressions in which the operator follows the 
@@ -53,51 +54,51 @@ compact and straightforward.  It is the standard notation
 used by Hewlett Packard calculators.
 
 """,
-    "+" : """
+        "+": """
 +:  Pops x and y from the stack and pushes x + y.
 """,
-    "-" : """
+        "-": """
 -:  Pops x and y from the stack and pushes x - y.
 """,
-    "*" : """
+        "*": """
 *:  Pops x and y from the stack and pushes x * y.
 """,
-    "/" : """
+        "/": """
 /:  Pops x and y from the stack and pushes x / y.
      y must not be zero.
 """,
-    "%" : """
+        "%": """
 %:  Pops x and y from the stack and pushes x mod y.
      y must not be zero.
 """,
-    "**" : """
+        "**": """
 ** :  Pops x and y from the stack and pushes x to the y power.
       '^' is a synonym for '**'.
 """,
-    "1+" : """
+        "1+": """
 1+ :  Pops x from the stack, increments it, and pushes it.
       '++' is a synonym for '1+'.
 """,
-    "1-" : """
+        "1-": """
 1- :  Pops x from the stack, decrements it, and pushes it.
       '--' is a synonym for '1-'.
 """,
-    "int" : """
+        "int": """
 int:  Pops x from the stack and pushes the integer
       portion of x
 """,
-    "sqrt" : """
+        "sqrt": """
 sqrt:  Pops x from the stack and pushes its square root.
        x must be non-negative.
 """,
-    "help" : """
+        "help": """
 help <topic>:  Displays the help text for <topic>.  
                If no topic is specified, displays
                the help text overview.
 
                'h' and '?' are aliases for 'help'.
 """,
-    "load" : """
+        "load": """
 load <filename>:  Reads and interprets the contents of <filename>.
                   The file may contain any valid calculator commands.
                   Typically, <filename> is the result of a
@@ -106,10 +107,10 @@ load <filename>:  Reads and interprets the contents of <filename>.
 
                   See also 'profile'.
 """,
-    "quit" : """
+        "quit": """
 quit:  Exits from the calculator.
 """,
-    "save" : """
+        "save": """
 save <filename>:  Saves the current state of the calculator,
                   including variable definitions and values,
                   constants, and function definitions. 
@@ -117,31 +118,31 @@ save <filename>:  Saves the current state of the calculator,
                   The saved state can be restored with the 'load'
                   command.
 """,
-    "shell" : """
+        "shell": """
 shell: Invokes a shell.
 """,
-    "profile" : """
+        "profile": """
 During initialization, ev looks for a file called '.evrc' in the home
 directory.  If this profile file exists, it is loaded.  This feature
 can be used to load frequently used constants and function definition.
 
 See also 'load'.
 """,
-    "e" : """
+        "e": """
 e:  Pushes the value of the constant e (2.718281828459045).
 """,
-    "pi" : """
+        "pi": """
 pi: Pushes the value of the constant pi (3.141592653589793).
 """,
-    "todegrees" : """
+        "todegrees": """
 toDegrees:  Pops x from the stack, converts it from radians to
             degrees, and pushes it back on the stack.
 """,
-    "toradians" : """
+        "toradians": """
 toRadians:  Pops x from the stack, converts it from degrees to
             radians, and pushes it back on the stack.
 """,
-    "const" : """
+        "const": """
 const:  Allows a constant to be defined.  The syntax used is
 
         const <constname> <definition>
@@ -154,7 +155,7 @@ const:  Allows a constant to be defined.  The syntax used is
         input line, and the rest of the line is ignored after
         the constant is evaluated.
 """,
-    "define" : """
+        "define": """
 define:  Allows a function to be defined.  The syntax used is
 
          define <function name> <definition>
@@ -166,7 +167,7 @@ define:  Allows a function to be defined.  The syntax used is
          input line, and the rest of the line is ignored after
          the function definition is evaluated.
 """,
-    "format" : """
+        "format": """
 format:  Defines the format used for displaying numeric values.
          The syntax used is:
 
@@ -190,7 +191,7 @@ format:  Defines the format used for displaying numeric values.
          input line, and the rest of the line is ignored after
          the format string is processed.
 """,
-    "var" : """
+        "var": """
 var:  Allows a variable to be defined.  The syntax used is
 
       var <variable name> [, <variable name> ...]
@@ -211,22 +212,22 @@ var:  Allows a variable to be defined.  The syntax used is
       redefine a keyword, it will no longer perform its regular
       function.
 """,
-    "exp" : """
+        "exp": """
 exp:  Pops x from the stack and pushes e^x.
 """,
-    "ln" : """
+        "ln": """
 ln:  Pops x from the stack and pushes ln(x), the natural
      logarithm (base e) of x.
 
      x must be greater than zero.
 """,
-    "log" : """
+        "log": """
 log:  Pops x from the stack and pushes log(x), the base 10
       logarithm of x.
 
       x must be greater than zero.
 """,
-    "@" : """
+        "@": """
 @:  Used to fetch the value of a variable.  The syntax used is
 
     <varname> @
@@ -237,7 +238,7 @@ log:  Pops x from the stack and pushes log(x), the base 10
 
     See also 'var', '!'.
 """,
-    "!" : """
+        "!": """
 !:  Used to set the value of a variable.  The syntax used is
 
     <value> <varname> !
@@ -248,99 +249,99 @@ log:  Pops x from the stack and pushes log(x), the base 10
 
     See also 'var', '@'.
 """,
-    "." : """
+        ".": """
 .:  Pops x from the stack and prints it.  The display format
     is controlled by the current value of the format string.
 
     See also 'format', '.s'.
 """,
-    ".c" : """
+        ".c": """
 .c:  Prints a list of all user-defined constants and their values.
 
      See also 'const', 'format'.
 """,
-    ".f" : """
+        ".f": """
 .f:  Prints a list of all user-defined functions and their
      definitions.
 
      See also 'define'.
 """,
-    ".s" : """
+        ".s": """
 .s:  Prints the contents of the stack.  The stack level is not
      affected.  The display format is controlled by the current
      value of the format string.
 
      See also 'format'.
 """,
-    ".v" : """
+        ".v": """
 .v:  Prints a list of all user-defined variables and their values.
 
      See also 'var', 'format'.
 """,
-    "clear" : """
+        "clear": """
 clear:  Clears the contents of the stack.
 """,
-    "depth" : """
+        "depth": """
 depth:  Pushes the number of items on the stack
 """,
-    "drop" : """
+        "drop": """
 drop:  Pops the top element from the stack and discards it.
 """,
-    "dup" : """
+        "dup": """
 dup:  Pops the top element from the stack and pushes it twice.
 """,
-    "over" : """
+        "over": """
 over:  Pops x and y from the stack, then pushes x, y, x.
 """,
-    "rot" : """
+        "rot": """
 rot:  Pops x, y, and z from the stack, then pushes y, z, and x.
 """,
-    "swap" : """
+        "swap": """
 swap:  Exchanges the order of the top two elements on the stack.
 """,
-    "acos" : """
+        "acos": """
 acos:  Pops x from the stack and then pushes the arccosine of
        x in radians
 
        See also 'toDegrees', 'toRadians'.
 """,
-    "asin" : """
+        "asin": """
 asin:  Pops x from the stack and then pushes the arcsine of
        x in radians
 
        See also 'toDegrees', 'toRadians'.
 """,
-    "atan" : """
+        "atan": """
 atan:  Pops x from the stack and then pushes the arctangent of
        x in radians in the range -pi to pi.
 
        See also 'toDegrees', 'toRadians'.
 """,
-    "atan2" : """
+        "atan2": """
 atan2: Pops y and x from the stack and then pushes the arctangent
        of y/x in radians in the range -pi to pi.
 
        See also 'toDegrees', 'toRadians'.
 """,
-    "cos" : """
+        "cos": """
 cos:  Pops x from the stack and then pushes the cosine of x.
       x must be expressed in radians.
 
       See also 'toDegrees', 'toRadians'.
 """,
-    "sin" : """
+        "sin": """
 sin:  Pops x from the stack and then pushes the sine of x.
       x must be expressed in radians.
 
       See also 'toDegrees', 'toRadians'.
 """,
-    "tan" : """
+        "tan": """
 tan:  Pops x from the stack and then pushes the tangent of x.
       x must be expressed in radians.
 
       See also 'toDegrees', 'toRadians'.
 """,
-    "fmtstr" : """
+        "fmtstr": """
 fmtstr: Prints the current format string
 """,
     }
@@ -356,6 +357,7 @@ fmtstr: Prints the current format string
             return
         text = EVHelp.helptext[lctopic]
         print(text)
+
 
 #   ============================================================
 #   Mainline

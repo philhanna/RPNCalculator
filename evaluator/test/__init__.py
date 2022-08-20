@@ -12,3 +12,8 @@ def stdout_redirected(new_stdout):
         yield None
     finally:
         sys.stdout = save_stdout
+
+
+__all__ = [
+    'stdout_redirected',
+]

@@ -1,7 +1,7 @@
 import unittest
 from io import StringIO
 
-from evaluator.Evaluator import Evaluator
+from evaluator import Evaluator
 from evaluator.test import stdout_redirected
 
 

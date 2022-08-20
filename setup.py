@@ -2,12 +2,12 @@ from setuptools import setup
 
 setup(
     name='RPNCalculator',
-    version='1.4.0',
-    description='Interactive Forth-like calculator',
+    version='1.5.0',
+    packages=['evaluator', 'evaluator.test'],
+    options={"bdist_wheel": {"universal": True}},
+    url='https://github.com/philhanna/RPNCalculator',
+    license='MIT',
     author='Phil Hanna',
     author_email='ph1204@gmail.com',
-    license='MIT',
-    packages=['evaluator', 'evaluator.test'],
-    url='https://github.com/philhanna/RPNCalculator',
-    zip_safe=False
+    description='Reverse Polish notation calculator',
 )

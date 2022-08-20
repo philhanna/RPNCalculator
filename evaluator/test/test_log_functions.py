@@ -1,6 +1,6 @@
 import unittest
 
-from evaluator.Evaluator import Evaluator
+from evaluator import Evaluator
 
 
 class TestLogFunctions(unittest.TestCase):

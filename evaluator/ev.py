@@ -5,7 +5,7 @@ import os.path
 import re
 import sys
 
-from evaluator.EVHelp import EVHelp
+from evaluator.ev_help import EVHelp
 
 
 def stack_needs(n):

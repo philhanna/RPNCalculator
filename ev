@@ -1,7 +1,7 @@
 #! /usr/bin/python3
 
 import sys
-from evaluator.Evaluator import Evaluator
+from evaluator import Evaluator
 
 app = Evaluator()
 app.run(sys.argv[1:])
