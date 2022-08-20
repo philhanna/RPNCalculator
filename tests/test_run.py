@@ -1,8 +1,8 @@
 import sys
 from io import StringIO
 from unittest import TestCase
-from evaluator import Evaluator, EXIT
-from evaluator.test import stdin_redirected, stdout_redirected
+from evaluator import Evaluator
+from tests import stdin_redirected, stdout_redirected
 
 
 class TestRun(TestCase):

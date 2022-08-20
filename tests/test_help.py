@@ -2,7 +2,7 @@ from io import StringIO
 from unittest import TestCase
 
 from evaluator import EVHelp
-from evaluator.test import stdout_redirected
+from tests import stdout_redirected
 
 
 class TestHelp(TestCase):

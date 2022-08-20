@@ -2,7 +2,7 @@ import unittest
 from io import StringIO
 
 from evaluator import Evaluator
-from evaluator.test import stdout_redirected
+from tests import stdout_redirected
 
 
 class TestArithmeticOperations(unittest.TestCase):

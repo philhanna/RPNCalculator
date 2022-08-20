@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='RPNCalculator',
     version='1.5.0',
-    packages=['evaluator', 'evaluator.test'],
+    packages=['evaluator', 'tests'],
     options={"bdist_wheel": {"universal": True}},
     url='https://github.com/philhanna/RPNCalculator',
     license='MIT',
