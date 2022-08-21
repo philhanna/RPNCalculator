@@ -11,16 +11,10 @@ class TestFullLineCommands(unittest.TestCase):
 
     def setUp(self):
         self.ev = Evaluator()
+        self.tmp = tempfile.gettempdir()
 
     def tearDown(self):
         del self.ev
-
-    def test_help(self):
-        with StringIO() as fp:
-            with stdout_redirected(fp):
-                self.ev.ev('help')
-                output = fp.getvalue()
-        self.assertTrue("Reverse Polish Notation" in output)
 
     def test_ev_bad_const(self):
         with StringIO() as fp:
@@ -89,3 +83,19 @@ class TestFullLineCommands(unittest.TestCase):
             self.assertIn("42", output)
         finally:
             os.remove(filename)
+
+    def test_ev_save_but_nothing_to_save(self):
+        temppath = os.path.join(self.tmp, "bogus")
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                self.ev.ev(f"save {temppath}")
+                output = fp.getvalue()
+        self.assertIn("Nothing", output)
+
+    def test_ev_save_no_filename(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                self.ev.ev("const meaning 42")
+                self.ev.ev(f"save")
+                output = fp.getvalue()
+        self.assertIn("No file name", output)

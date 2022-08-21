@@ -1,11 +1,22 @@
 from io import StringIO
 from unittest import TestCase
 
-from evaluator import EVHelp
+from evaluator import EVHelp, Evaluator
 from tests import stdout_redirected
 
 
 class TestHelp(TestCase):
+
+    def test_help(self):
+        try:
+            ev = Evaluator()
+            with StringIO() as fp:
+                with stdout_redirected(fp):
+                    ev.ev('help')
+                    output = fp.getvalue()
+            self.assertTrue("Reverse Polish Notation" in output)
+        finally:
+            del ev
 
     def test_overview(self):
         with StringIO() as fp:
