@@ -45,3 +45,15 @@ class TestRun(TestCase):
             self.assertIn("6", output)
         finally:
             sys.argv = sys.argv[:-2]
+
+    def test_ev_no_command(self):
+        with StringIO() as fp:
+            ev = Evaluator()
+            rc = ev.ev(None)
+            self.assertIsNone(rc)
+
+    def test_ev_comment_command(self):
+        with StringIO() as fp:
+            ev = Evaluator()
+            rc = ev.ev("# DEFINE")
+            self.assertIsNone(rc)
