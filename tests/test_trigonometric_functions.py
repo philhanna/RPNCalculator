@@ -5,12 +5,19 @@ from evaluator import Evaluator
 
 class TestTrigonometricFunctions(unittest.TestCase):
     pi = 3.14159265358979
+    e = 2.718281828459045
 
     def setUp(self):
         self.ev = Evaluator()
 
     def tearDown(self):
         del self.ev
+
+    def test_e(self):
+        self.ev.ev("e")
+        expected = self.e
+        actual = self.ev.pop()
+        self.assertEqual(expected, actual)
 
     def test_todegrees(self):
         self.ev.ev("pi toDegrees")
