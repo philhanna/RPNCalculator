@@ -434,9 +434,9 @@ To exit from ev, enter "q"
         try:
             with open(filename, "r") as f:
                 for line in f:
+                    line = line.strip()
                     if not line:
                         continue
-                    line = line.strip()
                     if line.startswith("#"):
                         continue
                     self.ev(line)
