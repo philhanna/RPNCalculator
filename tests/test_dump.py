@@ -33,6 +33,14 @@ class TestDump(TestCase):
                 output = fpout.getvalue()
         self.assertIsNotNone(re.search(r"FUNCTION\s+DEFINITION.*meaning\s+42", output, re.DOTALL))
 
+    def test_dump_functions_none_defined(self):
+        with StringIO() as fpout:
+            with stdout_redirected(fpout):
+                ev = self.ev
+                ev.ev(".F")
+                output = fpout.getvalue()
+        self.assertEqual("", output)
+
     def test_dump_variables(self):
         with StringIO() as fpout:
             with stdout_redirected(fpout):
@@ -54,6 +62,31 @@ class TestDump(TestCase):
                 self.assertListEqual(["term", "0002", "30.0"], tokens)
         fp.close()
 
+    def test_dump_variables_none_defined(self):
+        with StringIO() as fpout:
+            with stdout_redirected(fpout):
+                ev = self.ev
+                ev.ev(".V")
+                output = fpout.getvalue()
+        self.assertEqual("", output)
+
+    def test_duplicate_variable_definition(self):
+        with StringIO() as fpout:
+            with stdout_redirected(fpout):
+                ev = self.ev
+                ev.ev("var interest")
+                ev.ev("var INTEREST")
+                ev.ev(".V")
+                output = fpout.getvalue()
+        fp = io.StringIO(output)
+        for i, line in enumerate(fp):
+            tokens = line.split()
+            if i == 0:
+                self.assertListEqual(["VAR", "ADDR", "VALUE"], tokens)
+            elif i == 1:
+                self.assertListEqual(["interest", "0001", "0"], tokens)
+        fp.close()
+
     def test_dump_constants(self):
         with StringIO() as fpout:
             with stdout_redirected(fpout):
@@ -69,3 +102,11 @@ class TestDump(TestCase):
             elif i == 1:
                 self.assertListEqual(["daylight", "1440.0"], tokens)
         fp.close()
+
+    def test_dump_constants_none_defined(self):
+        with StringIO() as fpout:
+            with stdout_redirected(fpout):
+                ev = self.ev
+                ev.ev(".C")
+                output = fpout.getvalue()
+        self.assertEqual("", output)

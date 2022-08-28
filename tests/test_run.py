@@ -66,6 +66,13 @@ class TestRun(TestCase):
         ev.ev("shell")
         os.system.assert_called_with("/usr/bin/gnome-terminal")
 
+    def test_do_shell_windows(self):
+        os.system = MagicMock()
+        sys.platform = MagicMock(return_value = "windows")
+        ev = Evaluator()
+        ev.ev("shell")
+        os.system.assert_called_with("cmd /k")
+
     def test_bad_token(self):
         with StringIO() as fp:
             with stdout_redirected(fp):

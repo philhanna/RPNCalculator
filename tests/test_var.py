@@ -1,6 +1,8 @@
+from io import StringIO
 from unittest import TestCase
 
 from evaluator import Evaluator
+from tests import stdout_redirected
 
 
 class TestVariable(TestCase):
@@ -19,6 +21,13 @@ class TestVariable(TestCase):
         actual = self.ev.pop()
         self.assertEqual(expected, actual)
 
+    def test_bad_store(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                self.ev.ev("4 -14 !")
+                output = fp.getvalue()
+        self.assertIn("Invalid memory reference", output)
+
     def test_fetch(self):
         self.ev.ev("var amount")
         self.ev.ev("1 3 / amount !")
@@ -26,3 +35,17 @@ class TestVariable(TestCase):
         expected = .3333333333333333
         actual = self.ev.pop()
         self.assertAlmostEqual(expected, actual)
+
+    def test_fetch_bad(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                self.ev.ev("-3 @")
+                output = fp.getvalue()
+        self.assertIn("Invalid memory reference, index=-3", output)
+
+    def test_fetch_bad2(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                self.ev.ev("1000 @")
+                output = fp.getvalue()
+        self.assertIn("Invalid memory reference, index=1000", output)

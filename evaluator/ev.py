@@ -367,6 +367,7 @@ To exit from ev, enter "q"
 
     @stack_needs(1)
     def do_fetch(self):
+        """ Pushes the current value of a variable """
         f1 = int(self.pop())
         if f1 < 1 or f1 >= len(self.memory):
             print(Evaluator.MSG["BAD_VARNUM"].format(f1))
@@ -591,6 +592,7 @@ To exit from ev, enter "q"
         tokens = line.split()
         for varname in tokens:
             varname = varname.upper()
+            # Ignore if variable is already defined
             if varname in self.variable:
                 continue
             self.memory.append(0)
@@ -633,26 +635,11 @@ To exit from ev, enter "q"
                 value=value))
 
     @staticmethod
-    def get_numeric_value(arg):
-        try:
-            return float(arg)
-        except ValueError:
-            m = re.match(r'0[xX]([0-9a-fA-F]+)', arg)
-            if m:
-                hexstring = m.group(1)
-                return float.fromhex(hexstring)
-            print("{} is not numeric".format(arg))
-            return
-
-    @staticmethod
     def is_numeric(arg):
         try:
-            float(arg)
+            mpf(arg)
             return True
         except ValueError:
-            m = re.match(r'0[xX][0-9a-fA-F]+', arg)
-            if m:
-                return True
             return False
 
     def load_profile(self):

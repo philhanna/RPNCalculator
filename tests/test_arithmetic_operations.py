@@ -85,15 +85,17 @@ class TestArithmeticOperations(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_mod(self):
-        self.ev.ev("7 3 mod")
-        expected = 1
-        actual = self.ev.pop()
-        self.assertEqual(expected, actual)
-
         self.ev.ev("14 5 %")
         expected = 4
         actual = self.ev.pop()
         self.assertEqual(expected, actual)
+
+    def test_mod_div_by_zero(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                self.ev.ev("14 0 %")
+                output = fp.getvalue()
+        self.assertIn("divide by zero", output)
 
     def test_int(self):
         self.ev.ev("7 3 / int")
@@ -107,11 +109,38 @@ class TestArithmeticOperations(unittest.TestCase):
         actual = self.ev.pop()
         self.assertEqual(expected, actual)
 
+    def test_bad_sqrt(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                self.ev.ev("-3 sqrt")
+                output = fp.getvalue()
+        self.assertEqual("Cannot take the square root of the negative number -3.0\n", output)
+
     def test_pow(self):
         self.ev.ev("2 3 **")
         expected = 8
         actual = self.ev.pop()
         self.assertEqual(expected, actual)
+
+    def test_pow_non_integer(self):
+        self.ev.ev("2 1 3 / **")
+        expected = 1.259921049894873
+        actual = self.ev.pop()
+        self.assertAlmostEqual(expected, actual)
+
+    def test_pow_negative_base(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                self.ev.ev("-3 2 **")
+                output = fp.getvalue()
+        self.assertIn("Cannot exponentiate", output)
+
+    def test_pow_zero_base(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                self.ev.ev("0 2 **")
+                output = fp.getvalue()
+        self.assertIn("Cannot exponentiate", output)
 
     def test_empty_stack(self):
         with StringIO() as fp:
