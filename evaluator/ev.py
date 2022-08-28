@@ -4,7 +4,7 @@ import os.path
 import re
 import readline
 
-from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp
+from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
 from evaluator.ev_help import EVHelp
 
@@ -168,7 +168,7 @@ To exit from ev, enter "q"
             elif token in self.function:
                 self.ev(self.function[token])
             elif self.is_numeric(token):
-                self.push(token)
+                self.push(mpf(token))
             elif token == '@':
                 self.do_fetch()
             elif token == '!':
