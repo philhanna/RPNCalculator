@@ -160,7 +160,6 @@ To exit from ev, enter "q"
                 return EXIT
             elif token in self.variable:
                 value = self.variable[token]
-                value = float(value)
                 self.push(value)
             elif token in self.constant:
                 value = self.constant[token]
@@ -169,7 +168,7 @@ To exit from ev, enter "q"
             elif token in self.function:
                 self.ev(self.function[token])
             elif self.is_numeric(token):
-                self.push(self.get_numeric_value(token))
+                self.push(token)
             elif token == '@':
                 self.do_fetch()
             elif token == '!':
