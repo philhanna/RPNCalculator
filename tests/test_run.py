@@ -1,6 +1,9 @@
+import os
 import sys
 from io import StringIO
 from unittest import TestCase
+from unittest.mock import MagicMock
+
 from evaluator import Evaluator
 from tests import stdin_redirected, stdout_redirected
 
@@ -55,3 +58,10 @@ class TestRun(TestCase):
         ev = Evaluator()
         rc = ev.ev("# DEFINE")
         self.assertIsNone(rc)
+
+    def test_do_shell(self):
+        os.system = MagicMock()
+        ev = Evaluator()
+        ev.ev("shell")
+        os.system.assert_called_with("/usr/bin/gnome-terminal")
+
