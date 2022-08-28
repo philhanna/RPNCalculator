@@ -30,6 +30,7 @@ Memory operations:       @, !
 Print functions:         ., .c, .f, .s, .v
 Stack functions:         clear, depth, drop, dup, over, rot, swap
 Trigonometric functions: acos, asin, atan, atan2, cos, sin, tan
+
 """,
 
         "rpn": """
@@ -169,6 +170,8 @@ digits:  Defines the number of digits used for displaying numeric values.
          digits <digits>
 
          where <digits> is an integer.
+
+         If no digits argument is specified, shows current setting.
 """,
         "var": """
 var:  Allows a variable to be defined.  The syntax used is
