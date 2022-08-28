@@ -16,14 +16,6 @@ class TestSave(unittest.TestCase):
     def tearDown(self):
         del self.ev
 
-    def test_ev_save_but_nothing_to_save(self):
-        temppath = os.path.join(self.tmp, "bogus")
-        with StringIO() as fp:
-            with stdout_redirected(fp):
-                self.ev.ev(f"save {temppath}")
-                output = fp.getvalue()
-        self.assertIn("Nothing", output)
-
     def test_ev_save_no_filename(self):
         with StringIO() as fp:
             with stdout_redirected(fp):

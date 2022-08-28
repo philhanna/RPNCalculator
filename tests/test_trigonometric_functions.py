@@ -1,11 +1,10 @@
 import unittest
+from mpmath import e, pi, radians, sin, cos
 
 from evaluator import Evaluator
 
 
 class TestTrigonometricFunctions(unittest.TestCase):
-    pi = 3.14159265358979
-    e = 2.718281828459045
 
     def setUp(self):
         self.ev = Evaluator()
@@ -15,7 +14,7 @@ class TestTrigonometricFunctions(unittest.TestCase):
 
     def test_e(self):
         self.ev.ev("e")
-        expected = self.e
+        expected = e
         actual = self.ev.pop()
         self.assertEqual(expected, actual)
 
@@ -27,7 +26,7 @@ class TestTrigonometricFunctions(unittest.TestCase):
 
     def test_toradians(self):
         self.ev.ev("90 toRadians")
-        expected = self.pi / 2.0
+        expected = pi / 2.0
         actual = self.ev.pop()
         self.assertAlmostEqual(expected, actual)
 
@@ -46,25 +45,25 @@ class TestTrigonometricFunctions(unittest.TestCase):
     def test_atan(self):
         self.ev.ev("1 atan")
         actual = self.ev.pop()
-        expected = self.pi / 4
+        expected = pi / 4
         self.assertAlmostEqual(expected, actual)
 
     def test_atan2(self):
         self.ev.ev("-1 -1 atan2")
         actual = self.ev.pop()
-        expected = -3 * self.pi / 4
+        expected = -3 * pi / 4
         self.assertAlmostEqual(expected, actual)
 
     def test_cos(self):
         self.ev.ev("55 toRadians cos")
         actual = self.ev.pop()
-        expected = 0.573576436351
+        expected = cos(radians(55))
         self.assertAlmostEqual(expected, actual)
 
     def test_sin(self):
         self.ev.ev("14 toRadians sin")
         actual = self.ev.pop()
-        expected = 0.2419218956
+        expected = sin(radians(14))
         self.assertAlmostEqual(expected, actual)
 
     def test_tan(self):

@@ -1,8 +1,9 @@
 import sys
-import math
 import os
 import os.path
 import re
+
+from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp
 
 from evaluator.ev_help import EVHelp
 
@@ -30,15 +31,13 @@ class Evaluator:
     """ Interactive RPN calulator """
 
     #   Constants
-    E = 2.718281828459045
-    FMTSTR = "%f"
-    PI = 3.141592653589793
     PROMPT = "ev> "
 
     #   Error messages
     MSG = {
         "BAD_CONST": "Invalid syntax - should be 'const <name> <value>'",
         "BAD_CONSTP": "Invalid syntax - should be 'const <name> <statements>'",
+        "BAD_DIGITS": "'{}' is not a valid value for digits",
         "BAD_FORMAT": "Invalid format string  Should be printf-style.",
         "BAD_LOG": "Cannot take the log of a non-positive number",
         "BAD_OPEN": "Could not open file {}",
@@ -52,6 +51,7 @@ class Evaluator:
         "INFINITY": "Number too large to represent",
         "NEGATIVE_BASE": "Cannot exponentiate the non-positive number {}",
         "NO_DEFINE": "No function definition specified",
+        "NO_DIGITS": "Number of digits not specified",
         "NO_FILENAME": "No file name specified",
         "NO_SAVE": "Nothing to save",
         "NONNUMERIC": "Constants must be numeric",
@@ -65,12 +65,12 @@ class Evaluator:
         self.function = {}
         self.variable = {}
         self.memory = [-1]
-        self.fmtstr = Evaluator.FMTSTR
         self.helptext = {}
 
     def run(self):
         """ Mainline
         """
+
         import argparse
 
         parser = argparse.ArgumentParser(description="""
@@ -139,8 +139,8 @@ To exit from ev, enter "q"
         elif kwd == 'DEFINE':
             self.do_define(rest)
             return
-        elif kwd == 'FORMAT':
-            self.do_format(rest)
+        elif kwd == 'DIGITS':
+            self.do_digits(rest)
             return
         elif kwd == 'LOAD':
             self.do_load(rest)
@@ -240,13 +240,11 @@ To exit from ev, enter "q"
             elif token == 'INT':
                 self.do_int()
             elif token == 'PI':
-                self.push(Evaluator.PI)
+                self.push(pi)
             elif token == 'E':
-                self.push(Evaluator.E)
+                self.push(e)
             elif token == 'DEPTH':
                 self.do_depth()
-            elif token == 'FMTSTR':
-                self.do_format_string()
             elif token == 'SHELL':
                 self.do_shell()
             else:
@@ -256,10 +254,10 @@ To exit from ev, enter "q"
     def do_acos(self):
         x = self.pop()
         try:
-            y = math.acos(x)
+            y = acos(x)
             self.push(y)
-        except ValueError as e:
-            print(e)
+        except ValueError as myError:
+            print(myError)
 
     @stack_needs(2)
     def do_add(self):
@@ -272,22 +270,22 @@ To exit from ev, enter "q"
     def do_asin(self):
         x = self.pop()
         try:
-            y = math.asin(x)
+            y = asin(x)
             self.push(y)
-        except ValueError as e:
-            print(e)
+        except ValueError as myError:
+            print(myError)
 
     @stack_needs(1)
     def do_atan(self):
         x = self.pop()
-        y = math.atan(x)
+        y = atan(x)
         self.push(y)
 
     @stack_needs(2)
     def do_atan2(self):
         f2 = self.pop()
         f1 = self.pop()
-        self.push(math.atan2(f1, f2))
+        self.push(atan2(f1, f2))
 
     def do_clear(self):
         """ Clears the stack """
@@ -314,7 +312,7 @@ To exit from ev, enter "q"
     @stack_needs(1)
     def do_cos(self):
         f1 = self.pop()
-        self.push(math.cos(f1))
+        self.push(cos(f1))
 
     @stack_needs(1)
     def do_decrement(self):
@@ -334,6 +332,20 @@ To exit from ev, enter "q"
     def do_depth(self):
         """ (a1 a2 ... an -- a1 a2 ... an n) """
         self.push(len(self.stack))
+
+    @staticmethod
+    def do_digits(line):
+        tokens = line.split()
+        if len(tokens) == 0:
+            print(mp.dps)
+            return
+        try:
+            digits = int(tokens[0])
+            mp.dps = digits
+        except ValueError:
+            print(Evaluator.MSG["BAD_DIGITS"].format(tokens[0]))
+        finally:
+            pass
 
     @stack_needs(2)
     def do_div(self):
@@ -357,7 +369,7 @@ To exit from ev, enter "q"
     @stack_needs(1)
     def do_exp(self):
         x = self.pop()
-        result = math.exp(x)
+        result = exp(x)
         self.push(result)
 
     @stack_needs(1)
@@ -367,52 +379,6 @@ To exit from ev, enter "q"
             print(Evaluator.MSG["BAD_VARNUM"].format(f1))
             return
         self.push(self.memory[f1])
-
-    def do_format_string(self):
-        """Prints the current format string"""
-        print('format "{}"'.format(self.fmtstr))
-
-    def do_format(self, new_format):
-
-        #   If no parameter, show current value
-        if not new_format:
-            print(self.fmtstr)
-            return
-
-        #   Shortcuts
-        shortcuts = {
-            'default': Evaluator.FMTSTR,
-            'hex': '0x%x',
-            'hex8': '0x%08x',
-            'hex4': '0x%04x',
-            'hex2': '0x%02x',
-            'int': '%.0f',
-        }
-        if new_format in shortcuts:
-            new_format = shortcuts[new_format]
-        if new_format == 'shortcuts':
-            for k, v in sorted(shortcuts.items()):
-                print('format {k:<8} is "{v}"'.format(k=k, v=v))
-            return
-
-        #   Remove quotes if there are any
-        new_format = re.sub(r"""['"]""", '', new_format)
-
-        #   Validate according to
-        #   docs.python.org/2/library/stdtypes.html#string-formatting
-        m = re.search((
-            r'%'
-            r'[#0\- +]*'
-            r'\d*'
-            r'(\.\d+)*'
-            r'[diouxXeEfFgGcb]'
-        ), new_format)
-        if not m:
-            print(Evaluator.MSG["BAD_FORMAT"])
-            return
-
-        #   Assign the new format
-        self.fmtstr = new_format
 
     @staticmethod
     def do_help(topic):
@@ -446,13 +412,13 @@ To exit from ev, enter "q"
     @stack_needs(1)
     def do_ln(self):
         x = self.pop()
-        y = math.log(x)
+        y = ln(x)
         self.push(y)
 
     @stack_needs(1)
     def do_log(self):
         x = self.pop()
-        y = math.log10(x)
+        y = log10(x)
         self.push(y)
 
     @stack_needs(2)
@@ -491,13 +457,13 @@ To exit from ev, enter "q"
         if f2 == int(f2):
             result = f1 ** f2
         else:
-            result = math.pow(f1, f2)
+            result = power(f1, f2)
         self.push(result)
 
     @stack_needs(1)
     def do_print(self):
         f1 = self.pop()
-        print(self.format_value(f1))
+        print(f1)
 
     @stack_needs(3)
     def do_rotate(self):
@@ -513,28 +479,23 @@ To exit from ev, enter "q"
         """ Saves all functions, constants, and variables
         """
 
-        #   Remove quotes from filename, if present
-        filename = re.sub('"', '', filename)
-
-        #   Return if nothing to save
-        if not self.function and not self.constant and not self.variable:
-            print(Evaluator.MSG["NO_SAVE"])
-            return
-
         #   Open the output file
         if not filename:
             print(Evaluator.MSG["NO_FILENAME"])
             return
 
+        #   Remove quotes from filename, if present
+        filename = re.sub('"', '', filename)
+
         with open(filename, "wt") as OFILE:
+
+            #   Save digits of precision
+            OFILE.write(f"digits {mp.dps}\n")
 
             #   Save constants
             if self.constant:
                 for cname in sorted(self.constant):
-                    OFILE.write("const {name} {value}\n".format(
-                        name=cname.lower(),
-                        value=self.constant[cname]
-                    ))
+                    OFILE.write(f"const {cname.lower()} {self.constant[cname]}\n")
                 print(Evaluator.MSG["CON_SAVED"].format(
                     len(self.constant),
                     filename
@@ -571,9 +532,6 @@ To exit from ev, enter "q"
                     filename
                 ))
 
-            #   Save the format string
-            OFILE.write('format "{}"\n'.format(self.fmtstr))
-
     @staticmethod
     def do_shell():
         """ Invokes a command line shell """
@@ -585,7 +543,7 @@ To exit from ev, enter "q"
     @stack_needs(1)
     def do_sin(self):
         f1 = self.pop()
-        self.push(math.sin(f1))
+        self.push(sin(f1))
 
     @stack_needs(1)
     def do_sqrt(self):
@@ -593,7 +551,7 @@ To exit from ev, enter "q"
         if f1 < 0:
             print(Evaluator.MSG["BAD_SQRT"].format(f1))
             return
-        result = math.sqrt(f1)
+        result = sqrt(f1)
         self.push(result)
 
     @stack_needs(2)
@@ -622,18 +580,18 @@ To exit from ev, enter "q"
     @stack_needs(1)
     def do_tan(self):
         f1 = self.pop()
-        self.push(math.tan(f1))
+        self.push(tan(f1))
 
     @stack_needs(1)
     def do_to_degrees(self):
         f1 = self.pop()
-        result = f1 * 180. / Evaluator.PI
+        result = f1 * 180. / pi
         self.push(result)
 
     @stack_needs(1)
     def do_to_radians(self):
         f1 = self.pop()
-        result = f1 * Evaluator.PI / 180.0
+        result = f1 * pi / 180.0
         self.push(result)
 
     def do_variable(self, line):
@@ -651,10 +609,7 @@ To exit from ev, enter "q"
         print("CONSTANT        VALUE")
         for constname in sorted(self.constant.keys()):
             value = self.constant[constname]
-            print("{name:<8s}        {value}".format(
-                name=constname.lower(),
-                value=self.format_value(value)
-            ))
+            print(f"{constname.lower():<8s}        {value}")
 
     def dump_functions(self):
         if not len(self.function):
@@ -669,7 +624,7 @@ To exit from ev, enter "q"
 
     def dump_stack(self):
         for value in self.stack:
-            print(self.format_value(value))
+            print(value)
 
     def dump_variables(self):
         if not len(self.variable):
@@ -678,20 +633,11 @@ To exit from ev, enter "q"
         for varname in sorted(self.variable.keys()):
             lcname = varname.lower()
             addr = self.variable[varname]
-            value = self.format_value(self.memory[addr])
+            value = self.memory[addr]
             print("{name:<8s}  {addr:04d}  {value}".format(
                 name=lcname,
                 addr=addr,
                 value=value))
-
-    def format_value(self, value):
-        try:
-            output = self.fmtstr % float(value)
-        except TypeError:
-            output = self.fmtstr % int(value)
-        output = re.sub(r'(\.[0-9]*?)0+$', r'\1', output)
-        output = re.sub(r'\.$', '', output)
-        return output
 
     @staticmethod
     def get_numeric_value(arg):
