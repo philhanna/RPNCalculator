@@ -2,6 +2,7 @@ import sys
 import os
 import os.path
 import re
+import readline
 
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp
 
