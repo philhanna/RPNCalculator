@@ -53,3 +53,19 @@ class TestDump(TestCase):
             elif i == 2:
                 self.assertListEqual(["term", "0002", "30.0"], tokens)
         fp.close()
+
+    def test_dump_constants(self):
+        with StringIO() as fpout:
+            with stdout_redirected(fpout):
+                ev = self.ev
+                ev.ev("const daylight 24 60 *")
+                ev.ev(".C")
+                output = fpout.getvalue()
+        fp = io.StringIO(output)
+        for i, line in enumerate(fp):
+            tokens = line.split()
+            if i == 0:
+                self.assertListEqual(["CONSTANT", "VALUE"], tokens)
+            elif i == 1:
+                self.assertListEqual(["daylight", "1440.0"], tokens)
+        fp.close()
