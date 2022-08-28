@@ -163,7 +163,6 @@ To exit from ev, enter "q"
                 self.push(value)
             elif token in self.constant:
                 value = self.constant[token]
-                value = float(value)
                 self.push(value)
             elif token in self.function:
                 self.ev(self.function[token])
@@ -253,11 +252,8 @@ To exit from ev, enter "q"
     @stack_needs(1)
     def do_acos(self):
         x = self.pop()
-        try:
-            y = acos(x)
-            self.push(y)
-        except ValueError as myError:
-            print(myError)
+        y = acos(x)
+        self.push(y)
 
     @stack_needs(2)
     def do_add(self):
@@ -269,11 +265,8 @@ To exit from ev, enter "q"
     @stack_needs(1)
     def do_asin(self):
         x = self.pop()
-        try:
-            y = asin(x)
-            self.push(y)
-        except ValueError as myError:
-            print(myError)
+        y = asin(x)
+        self.push(y)
 
     @stack_needs(1)
     def do_atan(self):

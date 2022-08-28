@@ -55,6 +55,13 @@ class TestArithmeticOperations(unittest.TestCase):
         actual = self.ev.pop()
         self.assertAlmostEqual(expected, actual)
 
+    def test_div_by_zero(self):
+        with StringIO() as out:
+            with stdout_redirected(out):
+                self.ev.ev("10 0 /")
+                output = out.getvalue()
+        self.assertEqual("Cannot divide by zero\n", output)
+
     def test_increment(self):
         self.ev.ev("2 ++")
         expected = 3
