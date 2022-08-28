@@ -24,10 +24,10 @@ Commands:                help, load, quit, save, shell
 Configuration:           profile
 Constants:               e, pi
 Conversion functions:    toDegrees, toRadians
-Declaratives:            const, define, format, var
+Declaratives:            const, define, digits, var
 Log functions:           exp, ln, log
 Memory operations:       @, !
-Print functions:         ., .c, .f, .s, .v, fmtstr
+Print functions:         ., .c, .f, .s, .v
 Stack functions:         clear, depth, drop, dup, over, rot, swap
 Trigonometric functions: acos, asin, atan, atan2, cos, sin, tan
 """,
@@ -162,29 +162,13 @@ define:  Allows a function to be defined.  The syntax used is
          input line, and the rest of the line is ignored after
          the function definition is evaluated.
 """,
-        "format": """
-format:  Defines the format used for displaying numeric values.
+        "digits": """
+digits:  Defines the number of digits used for displaying numeric values.
          The syntax used is:
 
-         format "<fmtstr>"
+         digits <digits>
 
-         where <fmtstr> is a format string such as is used
-         by the C printf function.  The quotation marks are optional.
-
-         There are several predefined format shortcuts.
-         To see the list, enter
-
-         format shortcuts
-
-         For example,
-
-         format hex8
-
-         will set the format string to "0x%08x"
-
-         If 'format' is used, it must be the first token on the
-         input line, and the rest of the line is ignored after
-         the format string is processed.
+         where <digits> is an integer.
 """,
         "var": """
 var:  Allows a variable to be defined.  The syntax used is
