@@ -1,2 +1,0 @@
-setuptools~=65.1.0
-mpmath~=1.2.1
