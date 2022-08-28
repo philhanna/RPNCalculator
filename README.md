@@ -32,10 +32,10 @@ Then copy the mainline `ev` to a directory in your path.
 * Configuration:           `profile`
 * Constants:               `e`, `pi`
 * Conversion functions:    `toDegrees`, `toRadians`
-* Declaratives:            `const`, `define`, `format`, `var`
+* Declaratives:            `const`, `define`, `digits`, `var`
 * Log functions:           `exp`, `ln`, `log`
 * Memory operations:       `@`, `!`
-* Print functions:         `.`, `.c`, `.f`, `.s`, `.v`, `fmtstr`
+* Print functions:         `.`, `.c`, `.f`, `.s`, `.v`
 * Stack functions:         `clear`, `depth`, `drop`, `dup`, `over`, `rot`, `swap`
 * Trigonometric functions: `acos`, `asin`, `atan`, `atan2`, `cos`, `sin`, `tan`
 
