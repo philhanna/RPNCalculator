@@ -1,3 +1,4 @@
+import io
 import os
 import sys
 from io import StringIO
@@ -64,4 +65,12 @@ class TestRun(TestCase):
         ev = Evaluator()
         ev.ev("shell")
         os.system.assert_called_with("/usr/bin/gnome-terminal")
+
+    def test_bad_token(self):
+        with StringIO() as fp:
+            with stdout_redirected(fp):
+                ev = Evaluator()
+                ev.ev("bogus")
+                output = fp.getvalue()
+        self.assertIn("Unrecognized token BOGUS", output)
 
