@@ -224,7 +224,7 @@ To exit from ev, enter "q"
                 self.do_acos()
             elif token == 'ASIN':
                 self.do_asin()
-            elif token == 'LOG':
+            elif token in ('LOG', 'LOG10'):
                 self.do_log()
             elif token == 'LN':
                 self.do_ln()

@@ -208,6 +208,8 @@ log:  Pops x from the stack and pushes log(x), the base 10
       logarithm of x.
 
       x must be greater than zero.
+      
+      log10 is an alias for log.
 """,
         "@": """
 @:  Used to fetch the value of a variable.  The syntax used is
