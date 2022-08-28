@@ -22,10 +22,7 @@ To exit from ev, type `q`;
 After cloning the project from GitHub, run the command:
 ```bash
 cd <install_dir>
-python -m venv venv
-source venv/bin/activate
-python setup.py build
-python setup.py install
+pip install .
 ```
 Then copy the mainline `ev` to a directory in your path.
 
