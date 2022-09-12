@@ -61,6 +61,4 @@ is written
 1 5 + 3 4 - *
 ```
 
-It also makes rules about operator precedence unnecessary, since operators always take their operands from the top of the stack and push their results onto the stack.
-
-While RPN may take a little getting used to, it is quite compact and straightforward.  It is the standard notation used by Hewlett Packard calculators.
+It also makes rules about operator precedence unnecessary, since operators always take their operands from the top of the stack and push their results onto the stack. While RPN may take a little getting used to, it is quite compact and straightforward.  It is the standard notation used by Hewlett Packard calculators.
