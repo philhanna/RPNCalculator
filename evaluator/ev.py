@@ -234,6 +234,8 @@ To exit from ev, enter "q"
                 self.do_to_degrees()
             elif token in ['%', 'MOD']:
                 self.do_mod()
+            elif token == '/MOD':
+                self.do_divmod()
             elif token in ['**', '^']:
                 self.do_pow()
             elif token == 'INT':
@@ -424,6 +426,17 @@ To exit from ev, enter "q"
         f1 = self.pop()
         output = f1 % f2
         self.push(output)
+
+    @stack_needs(2)
+    def do_divmod(self):
+        f2 = round(self.pop())
+        if f2 == 0:
+            print(Evaluator.MSG["DIVIDE_BY_0"])
+            return
+        f1 = round(self.pop())
+        q, r = divmod(f1, f2)
+        self.push(r)
+        self.push(q)
 
     @stack_needs(2)
     def do_mult(self):

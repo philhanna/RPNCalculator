@@ -27,7 +27,7 @@ pip install .
 Then copy the mainline `ev` to a directory in your path.
 
 ## Commands by category
-* Arithmetic operations:   `+`, `-`, `*`, `/`, `%`, `**`, `1+`, `1-`, `int`, `sqrt`
+* Arithmetic operations:   `+`, `-`, `*`, `/`, `%`, `/mod`, `**`, `1+`, `1-`, `int`, `sqrt`
 * Commands:                `help`, `load`, `quit`, `save`, `shell`
 * Configuration:           `profile`
 * Constants:               `e`, `pi`
