@@ -19,7 +19,7 @@ function definitions.  It also allows save and restore operations.
    To exit from ev, type 'q';
 """,
         "topics": """
-Arithmetic operations:   +, -, *, /, %, **, 1+, 1-, int, sqrt
+Arithmetic operations:   +, -, *, /, %, /mod, **, 1+, 1-, int, sqrt
 Commands:                help, load, quit, save, shell
 Configuration:           profile
 Constants:               e, pi
@@ -65,6 +65,10 @@ used by Hewlett Packard calculators.
 """,
         "%": """
 %:  Pops x and y from the stack and pushes x mod y.
+     y must not be zero.
+""",
+        "/mod": """
+/mod:  Pops x and y from the stack and pushes the quotient and remainder.
      y must not be zero.
 """,
         "**": """
