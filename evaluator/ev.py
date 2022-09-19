@@ -107,14 +107,16 @@ To exit from ev, enter "q"
 
         #   Run any command line tokens
         if args.c:
-            self.ev(args.c)
+            rc = self.ev(args.c)
+            if rc == EXIT:
+                return
 
         #   Main loop
         while True:
             line = input(Evaluator.PROMPT)
             rc = self.ev(line)
             if rc == EXIT:
-                break
+                return
 
     def ev(self, command) -> str | None:
         """ Evaluates input line

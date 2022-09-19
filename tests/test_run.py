@@ -1,9 +1,8 @@
 import builtins
-import io
 import os
 import sys
 from io import StringIO
-from unittest import TestCase, mock
+from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
 from evaluator import Evaluator
