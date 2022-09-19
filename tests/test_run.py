@@ -1,9 +1,10 @@
+import builtins
 import io
 import os
 import sys
 from io import StringIO
-from unittest import TestCase
-from unittest.mock import MagicMock
+from unittest import TestCase, mock
+from unittest.mock import MagicMock, patch
 
 from evaluator import Evaluator
 from tests import stdin_redirected, stdout_redirected
@@ -38,14 +39,13 @@ class TestRun(TestCase):
     def test_command_line_tokens(self):
         try:
             sys.argv.append("-c")
-            sys.argv.append("2 3 * .")
+            sys.argv.append("2 3 * . quit")
             with StringIO() as out:
                 with stdout_redirected(out):
-                    with StringIO("quit") as fp:
-                        with stdin_redirected(fp):
-                            ev = Evaluator()
-                            ev.run()
-                            output = out.getvalue()
+                    with patch.object(builtins, "input", return_value="EXIT"):
+                        ev = Evaluator()
+                        ev.run()
+                    output = out.getvalue()
             self.assertIn("6", output)
         finally:
             sys.argv = sys.argv[:-2]
