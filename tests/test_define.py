@@ -14,16 +14,14 @@ class TestDefine(unittest.TestCase):
         del self.ev
 
     def test_ev_bad_define(self):
-        with StringIO() as fp:
-            with stdout_redirected(fp):
-                self.ev.ev("define bogus")
-                output = fp.getvalue()
+        with StringIO() as fp, stdout_redirected(fp):
+            self.ev.ev("define bogus")
+            output = fp.getvalue()
         self.assertIn("No function", output)
 
     def test_ev_good_define(self):
-        with StringIO() as fp:
-            with stdout_redirected(fp):
-                self.ev.ev("define double dup 2 *")
-                self.ev.ev("7 double .")
-                output = fp.getvalue()
+        with StringIO() as fp, stdout_redirected(fp):
+            self.ev.ev("define double dup 2 *")
+            self.ev.ev("7 double .")
+            output = fp.getvalue()
         self.assertIn("14", output)
