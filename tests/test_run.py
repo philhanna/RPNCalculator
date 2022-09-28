@@ -12,25 +12,25 @@ from tests import stdin_redirected, stdout_redirected
 class TestRun(TestCase):
 
     def test_run(self):
-        with StringIO() as out:
-            with stdout_redirected(out):
-                with StringIO("quit") as fp:
-                    with stdin_redirected(fp):
-                        ev = Evaluator()
-                        ev.run()
-                        output = out.getvalue()
+        with (StringIO() as out,
+              stdout_redirected(out),
+              StringIO("quit") as fp,
+              stdin_redirected(fp)):
+            ev = Evaluator()
+            ev.run()
+            output = out.getvalue()
         self.assertIn("ev>", output)
 
     def test_version(self):
         try:
             sys.argv.append("-v")
-            with StringIO() as out:
-                with stdout_redirected(out):
-                    with StringIO("quit") as fp:
-                        with stdin_redirected(fp):
-                            ev = Evaluator()
-                            ev.run()
-                            output = out.getvalue()
+            with (StringIO() as out,
+                  stdout_redirected(out),
+                  StringIO("quit") as fp,
+                  stdin_redirected(fp)):
+                ev = Evaluator()
+                ev.run()
+                output = out.getvalue()
             self.assertIn("Version", output)
         finally:
             sys.argv.remove("-v")
@@ -39,12 +39,11 @@ class TestRun(TestCase):
         try:
             sys.argv.append("-c")
             sys.argv.append("2 3 * . quit")
-            with StringIO() as out:
-                with stdout_redirected(out):
-                    with patch.object(builtins, "input", return_value="EXIT"):
-                        ev = Evaluator()
-                        ev.run()
-                    output = out.getvalue()
+            with StringIO() as out, stdout_redirected(out):
+                with patch.object(builtins, "input", return_value="EXIT"):
+                    ev = Evaluator()
+                    ev.run()
+                output = out.getvalue()
             self.assertIn("6", output)
         finally:
             sys.argv = sys.argv[:-2]
@@ -67,16 +66,14 @@ class TestRun(TestCase):
 
     def test_do_shell_windows(self):
         os.system = MagicMock()
-        sys.platform = MagicMock(return_value = "windows")
+        sys.platform = MagicMock(return_value="windows")
         ev = Evaluator()
         ev.ev("shell")
         os.system.assert_called_with("cmd /k")
 
     def test_bad_token(self):
-        with StringIO() as fp:
-            with stdout_redirected(fp):
-                ev = Evaluator()
-                ev.ev("bogus")
-                output = fp.getvalue()
+        with StringIO() as fp, stdout_redirected(fp):
+            ev = Evaluator()
+            ev.ev("bogus")
+            output = fp.getvalue()
         self.assertIn("Unrecognized token BOGUS", output)
-

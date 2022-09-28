@@ -1,6 +1,7 @@
 import unittest
 
 from evaluator import Evaluator
+from mpmath import log10
 
 
 class TestLogFunctions(unittest.TestCase):
