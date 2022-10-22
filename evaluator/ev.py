@@ -134,10 +134,10 @@ To exit from ev, enter "q"
         rest = " ".join(tokens[1:])
 
         if kwd in ['HELP', 'H', '?']:
-            self.do_help(rest.upper())
+            self.do_help(rest)
             return
         elif kwd == 'CONST':
-            self.do_const(rest.upper())
+            self.do_const(rest)
             return
         elif kwd == 'DEFINE':
             self.do_define(rest)
@@ -290,6 +290,7 @@ To exit from ev, enter "q"
 
     def do_const(self, line):
         """ Defines a constant """
+        line = line.upper()
         tokens = line.split()
         if len(tokens) < 2:
             print(Evaluator.MSG["BAD_CONST"])
@@ -380,7 +381,7 @@ To exit from ev, enter "q"
 
     @staticmethod
     def do_help(topic):
-        EVHelp(topic)
+        EVHelp(topic.upper())
 
     @stack_needs(1)
     def do_increment(self):
