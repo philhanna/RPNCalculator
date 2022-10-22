@@ -6,15 +6,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Table of contents
 
-- [Version 1.8.0 - 2022/10/22](#version-180---20221022)
-- [Version 1.7.1 - 2022/09/19](#version-171---20220919)
-- [Version 1.7.0 - 2022/09/12](#version-170---20220912)
-- [Version 1.6.1 - 2022/08/28](#version-161---20220828)
-- [Version 1.5.0 - 2022/08/20](#version-150---20220820)
-- [Version 1.4.0 - 2020/06/27](#version-140---20200627)
-- [Version 1.3.0 - 2019/19/21](#version-130---20191921)
+Notable changes for each version:
 
-## Version 1.8.0 - 2022/10/22
+- [1.8.0 - 2022/10/22](#180---20221022)
+- [1.7.1 - 2022/09/19](#171---20220919)
+- [1.7.0 - 2022/09/12](#170---20220912)
+- [1.6.1 - 2022/08/28](#161---20220828)
+- [1.5.0 - 2022/08/20](#150---20220820)
+- [1.4.0 - 2020/06/27](#140---20200627)
+- [1.3.0 - 2019/19/21](#130---20191921)
+
+## 1.8.0 - 2022/10/22
 
 ### Added
 - This `CHANGELOG.md`.
@@ -96,17 +98,17 @@ commands[token]()
 
 
 
-## Version 1.7.1 - 2022/09/19
+## 1.7.1 - 2022/09/19
 
 Bug fix:
 
 - Issue #9 - Command line -c C does not include a way to quit
 
-## Version 1.7.0 - 2022/09/12
+## 1.7.0 - 2022/09/12
 
 Added `/mod` (divmod) operator
 
-## Version 1.6.1 - 2022/08/28
+## 1.6.1 - 2022/08/28
 
 Now using [mpmath](https://mpmath.org/) for real and complex floating-point arithmetic
 with arbitrary precision.  This is controlled by the `digits &lt;n&gt;` command.
@@ -141,14 +143,14 @@ Increased unit test coverage by adding unit tests:
 Also updated help text to include the changes
 
 
-## Version 1.5.0 - 2022/08/20
+## 1.5.0 - 2022/08/20
 
 Declared classes in `__init__.py` and added unit tests.
 
-## Version 1.4.0 - 2020/06/27
+## 1.4.0 - 2020/06/27
 
 Added MIT license.
 
-## Version 1.3.0 - 2019/19/21
+## 1.3.0 - 2019/19/21
 
 First workable version, based on the Perl version.
