@@ -2,7 +2,7 @@ import sys
 import os
 import os.path
 import re
-import readline         # Do not delete this line - needed for cmdline behavior
+import readline  # Do not delete this line - needed for cmdline behavior
 
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
@@ -133,26 +133,19 @@ To exit from ev, enter "q"
         kwd = tokens[0].upper()
         rest = " ".join(tokens[1:])
 
-        if kwd in ['HELP', 'H', '?']:
-            self.do_help(rest)
-            return
-        elif kwd == 'CONST':
-            self.do_const(rest)
-            return
-        elif kwd == 'DEFINE':
-            self.do_define(rest)
-            return
-        elif kwd == 'DIGITS':
-            self.do_digits(rest)
-            return
-        elif kwd == 'LOAD':
-            self.do_load(rest)
-            return
-        elif kwd == 'SAVE':
-            self.do_save(rest)
-            return
-        elif kwd == 'VAR':
-            self.do_variable(rest)
+        full_line_commands = {
+            'HELP': self.do_help,
+            'H': self.do_help,
+            '?': self.do_help,
+            'CONST': self.do_const,
+            'DEFINE': self.do_define,
+            'DIGITS': self.do_digits,
+            'LOAD': self.do_load,
+            'SAVE': self.do_save,
+            'VAR': self.do_variable,
+        }
+        if kwd in full_line_commands:
+            full_line_commands[kwd](rest)
             return
 
         #   Evaluate each token
