@@ -12,7 +12,38 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Version 1.6.1 - 2022/08/28
 
-Increased unit test coverage by adding unit tests
+Now using [mpmath](https://mpmath.org/) for real and complex floating-point arithmetic
+with arbitrary precision.  This is controlled by the `digits &lt;n&gt;` command.
+For example:
+```
+ev> 2 sqrt .
+1.4142135623731
+ev> digits 60
+ev> 2 sqrt .
+1.41421356237309504880168872420969807856967187537694807317668
+```
+This can be set in `.evrc` if desired.
+
+Increased unit test coverage by adding unit tests:
+
+- `mod` with divide by zero
+- Invalid square root
+- Power with non-integer
+- Power with negative base
+- Power with zero base
+- Dump functions when none are defined
+- Dump variables when none are defined
+- Duplicate variable definition
+- Dump constants when none are defined
+- `do_shell` on Windows
+- Invalid store (no variable defined)
+- Invalid fetch (no variable defined)
+- `digits` with an invalid argument
+- Invalid token
+- Dump stack
+
+Also updated help text to include the changes
+
 
 ### Version 1.5.0 - 2022/08/20
 
