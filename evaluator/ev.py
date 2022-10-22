@@ -2,7 +2,7 @@ import sys
 import os
 import os.path
 import re
-import readline
+import readline         # Do not delete this line - needed for cmdline behavior
 
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
