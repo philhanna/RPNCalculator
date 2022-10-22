@@ -154,95 +154,93 @@ To exit from ev, enter "q"
             if token in ['Q', 'QUIT', 'EXIT']:
                 return EXIT
             elif token in self.variable:
-                value = self.variable[token]
-                self.push(value)
+                exec('self.push(self.variable[token])')
             elif token in self.constant:
-                value = self.constant[token]
-                self.push(value)
+                exec('self.push(self.constant[token])')
             elif token in self.function:
-                self.ev(self.function[token])
+                exec('self.ev(self.function[token])')
             elif self.is_numeric(token):
-                self.push(mpf(token))
+                exec('self.push(mpf(token))')
             elif token == '@':
-                self.do_fetch()
+                exec('self.do_fetch()')
             elif token == '!':
-                self.do_store()
+                exec('self.do_store()')
             elif token == '.':
-                self.do_print()
+                exec('self.do_print()')
             elif token in ['1+', '++']:
-                self.do_increment()
+                exec('self.do_increment()')
             elif token in ['1-', '--']:
-                self.do_decrement()
+                exec('self.do_decrement()')
             elif token == 'CLEAR':
-                self.do_clear()
+                exec('self.do_clear()')
             elif token == '+':
-                self.do_add()
+                exec('self.do_add()')
             elif token == '-':
-                self.do_sub()
+                exec('self.do_sub()')
             elif token == '*':
-                self.do_mult()
+                exec('self.do_mult()')
             elif token == '/':
-                self.do_div()
+                exec('self.do_div()')
             elif token == '.S':
-                self.dump_stack()
+                exec('self.dump_stack()')
             elif token == '.F':
-                self.dump_functions()
+                exec('self.dump_functions()')
             elif token == '.V':
-                self.dump_variables()
+                exec('self.dump_variables()')
             elif token == '.C':
-                self.dump_constants()
+                exec('self.dump_constants()')
             elif token == 'DUP':
-                self.do_dup()
+                exec('self.do_dup()')
             elif token == 'DROP':
-                self.do_drop()
+                exec('self.do_drop()')
             elif token == 'SWAP':
-                self.do_swap()
+                exec('self.do_swap()')
             elif token == 'OVER':
-                self.do_over()
+                exec('self.do_over()')
             elif token == 'ROT':
-                self.do_rotate()
+                exec('self.do_rotate()')
             elif token in ['SQR', 'SQRT']:
-                self.do_sqrt()
+                exec('self.do_sqrt()')
             elif token == 'SIN':
-                self.do_sin()
+                exec('self.do_sin()')
             elif token == 'COS':
-                self.do_cos()
+                exec('self.do_cos()')
             elif token == 'ATAN':
-                self.do_atan()
+                exec('self.do_atan()')
             elif token == 'ATAN2':
-                self.do_atan2()
+                exec('self.do_atan2()')
             elif token == 'TAN':
-                self.do_tan()
+                exec('self.do_tan()')
             elif token == 'ACOS':
-                self.do_acos()
+                exec('self.do_acos()')
             elif token == 'ASIN':
-                self.do_asin()
+                exec('self.do_asin()')
             elif token in ('LOG', 'LOG10'):
-                self.do_log()
+                exec('self.do_log()')
             elif token == 'LN':
-                self.do_ln()
+                exec('self.do_ln()')
             elif token == 'EXP':
-                self.do_exp()
+                exec('self.do_exp()')
             elif token == 'TORADIANS':
-                self.do_to_radians()
+                exec('self.do_to_radians()')
             elif token == 'TODEGREES':
-                self.do_to_degrees()
+                exec('self.do_to_degrees()')
             elif token in ['%', 'MOD']:
-                self.do_mod()
+                exec('self.do_mod()')
             elif token == '/MOD':
-                self.do_divmod()
+                exec('self.do_divmod()')
             elif token in ['**', '^']:
-                self.do_pow()
+                exec('self.do_pow()')
             elif token == 'INT':
-                self.do_int()
+                exec('self.do_int()')
             elif token == 'PI':
-                self.push(pi)
+                exec('self.push(pi)')
             elif token == 'E':
-                self.push(e)
+                exec('self.push(e)')
             elif token == 'DEPTH':
-                self.do_depth()
+                exec('self.do_depth()')
             elif token == 'SHELL':
-                self.do_shell()
+                exec('self.do_shell()')
             else:
                 print(Evaluator.MSG["BAD_TOKEN"].format(token))
 
