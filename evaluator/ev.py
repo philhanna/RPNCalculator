@@ -71,11 +71,7 @@ class Evaluator:
     def ev(self, command) -> str | None:
         """ Evaluates input line
         """
-
-        if not command:
-            return
-
-        if command[0] == '#':
+        if not command or command.startswith('#'):
             return
 
         full_line_commands = {
@@ -151,13 +147,13 @@ class Evaluator:
             if token in ['Q', 'QUIT', 'EXIT']:
                 return EXIT
             if self.is_numeric(token):
-                exec('self.push(mpf(token))')
+                self.push(mpf(token))
             elif token in self.variable:
-                exec('self.push(self.variable[token])')
+                self.push(self.variable[token])
             elif token in self.constant:
-                exec('self.push(self.constant[token])')
+                self.push(self.constant[token])
             elif token in self.function:
-                exec('self.ev(self.function[token])')
+                self.ev(self.function[token])
             elif token == 'PI':
                 self.push(pi)
             elif token == 'E':
