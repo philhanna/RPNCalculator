@@ -2,13 +2,14 @@ import builtins
 import os
 import sys
 from io import StringIO
-from unittest import TestCase
+from unittest import TestCase, skip
 from unittest.mock import MagicMock, patch
 
 from evaluator import Evaluator
 from tests import stdin_redirected, stdout_redirected
 
 
+@skip
 class TestRun(TestCase):
 
     def test_run(self):

@@ -23,7 +23,7 @@ parser.add_argument('-c', help='Execute commands before entering main loop')
 parser.add_argument('--noprofile', action='store_true',
                     help='Do not load profile from .evrc')
 args = parser.parse_args()
-app = Evaluator()
+ev = Evaluator()
 
 if args.version:
     version = get_version()
@@ -32,18 +32,18 @@ if args.version:
 
 #   Load the profile, if any
 if not args.noprofile:
-    app.load_profile()
+    ev.load_profile()
 
 #   Run any command line tokens
 if args.c:
-    rc = app.ev(args.c)
+    rc = ev.ev(args.c)
     if rc == EXIT:
         exit(0)
 
 #   Main loop
 while True:
     line = input(Evaluator.PROMPT)
-    rc = app.ev(line)
+    rc = ev.ev(line)
     if rc == EXIT:
         exit(0)
 

@@ -103,96 +103,69 @@ class Evaluator:
             token = token.upper()
             if token in ['Q', 'QUIT', 'EXIT']:
                 return EXIT
+            if self.is_numeric(token):
+                exec('self.push(mpf(token))')
             elif token in self.variable:
                 exec('self.push(self.variable[token])')
             elif token in self.constant:
                 exec('self.push(self.constant[token])')
             elif token in self.function:
                 exec('self.ev(self.function[token])')
-            elif self.is_numeric(token):
-                exec('self.push(mpf(token))')
-            elif token == '@':
-                exec('self.do_fetch()')
-            elif token == '!':
-                exec('self.do_store()')
-            elif token == '.':
-                exec('self.do_print()')
-            elif token in ['1+', '++']:
-                exec('self.do_increment()')
-            elif token in ['1-', '--']:
-                exec('self.do_decrement()')
-            elif token == 'CLEAR':
-                exec('self.do_clear()')
-            elif token == '+':
-                exec('self.do_add()')
-            elif token == '-':
-                exec('self.do_sub()')
-            elif token == '*':
-                exec('self.do_mult()')
-            elif token == '/':
-                exec('self.do_div()')
-            elif token == '.S':
-                exec('self.dump_stack()')
-            elif token == '.F':
-                exec('self.dump_functions()')
-            elif token == '.V':
-                exec('self.dump_variables()')
-            elif token == '.C':
-                exec('self.dump_constants()')
-            elif token == 'DUP':
-                exec('self.do_dup()')
-            elif token == 'DROP':
-                exec('self.do_drop()')
-            elif token == 'SWAP':
-                exec('self.do_swap()')
-            elif token == 'OVER':
-                exec('self.do_over()')
-            elif token == 'ROT':
-                exec('self.do_rotate()')
-            elif token in ['SQR', 'SQRT']:
-                exec('self.do_sqrt()')
-            elif token == 'SIN':
-                exec('self.do_sin()')
-            elif token == 'COS':
-                exec('self.do_cos()')
-            elif token == 'ATAN':
-                exec('self.do_atan()')
-            elif token == 'ATAN2':
-                exec('self.do_atan2()')
-            elif token == 'TAN':
-                exec('self.do_tan()')
-            elif token == 'ACOS':
-                exec('self.do_acos()')
-            elif token == 'ASIN':
-                exec('self.do_asin()')
-            elif token in ('LOG', 'LOG10'):
-                exec('self.do_log()')
-            elif token == 'LN':
-                exec('self.do_ln()')
-            elif token == 'EXP':
-                exec('self.do_exp()')
-            elif token == 'TORADIANS':
-                exec('self.do_to_radians()')
-            elif token == 'TODEGREES':
-                exec('self.do_to_degrees()')
-            elif token in ['%', 'MOD']:
-                exec('self.do_mod()')
-            elif token == '/MOD':
-                exec('self.do_divmod()')
-            elif token in ['**', '^']:
-                exec('self.do_pow()')
-            elif token == 'INT':
-                exec('self.do_int()')
             elif token == 'PI':
-                exec('self.push(pi)')
+                self.push(pi)
             elif token == 'E':
-                exec('self.push(e)')
-            elif token == 'DEPTH':
-                exec('self.do_depth()')
-            elif token == 'SHELL':
-                exec('self.do_shell()')
+                self.push(e)
             else:
-                print(Evaluator.MSG["BAD_TOKEN"].format(token))
+                commands = {
+                    '@': self.do_fetch,
+                    '!': self.do_store,
+                    '.': self.do_print,
+                    '1-': self.do_decrement,
+                    '--': self.do_decrement,
+                    '1+': self.do_increment,
+                    '++': self.do_increment,
+                    'CLEAR': self.do_clear,
+                    '+': self.do_add,
+                    '-': self.do_sub,
+                    '*': self.do_mult,
+                    '/': self.do_div,
+                    '.S': self.dump_stack,
+                    '.F': self.dump_functions,
+                    '.V': self.dump_variables,
+                    '.C': self.dump_constants,
+                    'DUP': self.do_dup,
+                    'DROP': self.do_drop,
+                    'SWAP': self.do_swap,
+                    'OVER': self.do_over,
+                    'ROT': self.do_rotate,
+                    'SQR': self.do_sqrt,
+                    'SQRT': self.do_sqrt,
+                    'SIN': self.do_sin,
+                    'COS': self.do_cos,
+                    'ATAN': self.do_atan,
+                    'ATAN2': self.do_atan2,
+                    'TAN': self.do_tan,
+                    'ACOS': self.do_acos,
+                    'ASIN': self.do_asin,
+                    'LOG': self.do_log,
+                    'LOG10': self.do_log,
+                    'LN': self.do_ln,
+                    'EXP': self.do_exp,
+                    'TORADIANS': self.do_to_radians,
+                    'TODEGREES': self.do_to_degrees,
+                    '%': self.do_mod,
+                    'MOD': self.do_mod,
+                    '/MOD': self.do_divmod,
+                    '**': self.do_pow,
+                    '^': self.do_pow,
+                    'INT': self.do_int,
+                    'DEPTH': self.do_depth,
+                    'SHELL': self.do_shell,
+                }
+                if token in commands:
+                    commands[token]()
+                else:
+                    print(Evaluator.MSG["BAD_TOKEN"].format(token))
 
     @stack_needs(1)
     def do_acos(self):
