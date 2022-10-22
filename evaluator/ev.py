@@ -68,9 +68,26 @@ class Evaluator:
         self.memory = [-1]
         self.helptext = {}
 
+    def run(self, args):
+        #   Load the profile, if any
+        if not args.noprofile:
+            self.load_profile()
+
+        #   Run any command line tokens
+        if args.c:
+            rc = self.ev(args.c)
+            if rc == EXIT:
+                return
+
+        #   Main loop
+        while True:
+            line = input(Evaluator.PROMPT)
+            rc = self.ev(line)
+            if rc == EXIT:
+                return
+
     def ev(self, command) -> str | None:
-        """ Evaluates input line
-        """
+        """Evaluates input line"""
         if not command or command.startswith('#'):
             return
 
@@ -85,6 +102,7 @@ class Evaluator:
             'SAVE': self.do_save,
             'VAR': self.do_variable,
         }
+
         commands = {
             '@': self.do_fetch,
             '!': self.do_store,
