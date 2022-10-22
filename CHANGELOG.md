@@ -5,10 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Table of contents
+
+- [Version 1.7.0 - 2022/09/12](#version-170---20220912)
 - [Version 1.6.1 - 2022/08/28](#version-161---20220828)
 - [Version 1.5.0 - 2022/08/20](#version-150---20220820)
 - [Version 1.4.0 - 2020/06/27](#version-140---20200627)
 - [Version 1.3.0 - 2019/19/21](#version-130---20191921)
+
+### Version 1.7.0 - 2022/09/12
+
+Added `/mod` (divmod) operator
 
 ### Version 1.6.1 - 2022/08/28
 
