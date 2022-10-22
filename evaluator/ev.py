@@ -78,11 +78,6 @@ class Evaluator:
         if command[0] == '#':
             return
 
-        #   Check for full line commands
-        tokens = command.split()
-        kwd = tokens[0].upper()
-        rest = " ".join(tokens[1:])
-
         full_line_commands = {
             'HELP': self.do_help,
             'H': self.do_help,
@@ -94,6 +89,58 @@ class Evaluator:
             'SAVE': self.do_save,
             'VAR': self.do_variable,
         }
+        commands = {
+            '@': self.do_fetch,
+            '!': self.do_store,
+            '.': self.do_print,
+            '1-': self.do_decrement,
+            '--': self.do_decrement,
+            '1+': self.do_increment,
+            '++': self.do_increment,
+            'CLEAR': self.do_clear,
+            '+': self.do_add,
+            '-': self.do_sub,
+            '*': self.do_mult,
+            '/': self.do_div,
+            '.S': self.dump_stack,
+            '.F': self.dump_functions,
+            '.V': self.dump_variables,
+            '.C': self.dump_constants,
+            'DUP': self.do_dup,
+            'DROP': self.do_drop,
+            'SWAP': self.do_swap,
+            'OVER': self.do_over,
+            'ROT': self.do_rotate,
+            'SQR': self.do_sqrt,
+            'SQRT': self.do_sqrt,
+            'SIN': self.do_sin,
+            'COS': self.do_cos,
+            'ATAN': self.do_atan,
+            'ATAN2': self.do_atan2,
+            'TAN': self.do_tan,
+            'ACOS': self.do_acos,
+            'ASIN': self.do_asin,
+            'LOG': self.do_log,
+            'LOG10': self.do_log,
+            'LN': self.do_ln,
+            'EXP': self.do_exp,
+            'TORADIANS': self.do_to_radians,
+            'TODEGREES': self.do_to_degrees,
+            '%': self.do_mod,
+            'MOD': self.do_mod,
+            '/MOD': self.do_divmod,
+            '**': self.do_pow,
+            '^': self.do_pow,
+            'INT': self.do_int,
+            'DEPTH': self.do_depth,
+            'SHELL': self.do_shell,
+        }
+
+        #   Check for full line commands
+        tokens = command.split()
+        kwd = tokens[0].upper()
+        rest = " ".join(tokens[1:])
+
         if kwd in full_line_commands:
             full_line_commands[kwd](rest)
             return
@@ -115,57 +162,10 @@ class Evaluator:
                 self.push(pi)
             elif token == 'E':
                 self.push(e)
+            elif token in commands:
+                commands[token]()
             else:
-                commands = {
-                    '@': self.do_fetch,
-                    '!': self.do_store,
-                    '.': self.do_print,
-                    '1-': self.do_decrement,
-                    '--': self.do_decrement,
-                    '1+': self.do_increment,
-                    '++': self.do_increment,
-                    'CLEAR': self.do_clear,
-                    '+': self.do_add,
-                    '-': self.do_sub,
-                    '*': self.do_mult,
-                    '/': self.do_div,
-                    '.S': self.dump_stack,
-                    '.F': self.dump_functions,
-                    '.V': self.dump_variables,
-                    '.C': self.dump_constants,
-                    'DUP': self.do_dup,
-                    'DROP': self.do_drop,
-                    'SWAP': self.do_swap,
-                    'OVER': self.do_over,
-                    'ROT': self.do_rotate,
-                    'SQR': self.do_sqrt,
-                    'SQRT': self.do_sqrt,
-                    'SIN': self.do_sin,
-                    'COS': self.do_cos,
-                    'ATAN': self.do_atan,
-                    'ATAN2': self.do_atan2,
-                    'TAN': self.do_tan,
-                    'ACOS': self.do_acos,
-                    'ASIN': self.do_asin,
-                    'LOG': self.do_log,
-                    'LOG10': self.do_log,
-                    'LN': self.do_ln,
-                    'EXP': self.do_exp,
-                    'TORADIANS': self.do_to_radians,
-                    'TODEGREES': self.do_to_degrees,
-                    '%': self.do_mod,
-                    'MOD': self.do_mod,
-                    '/MOD': self.do_divmod,
-                    '**': self.do_pow,
-                    '^': self.do_pow,
-                    'INT': self.do_int,
-                    'DEPTH': self.do_depth,
-                    'SHELL': self.do_shell,
-                }
-                if token in commands:
-                    commands[token]()
-                else:
-                    print(Evaluator.MSG["BAD_TOKEN"].format(token))
+                print(Evaluator.MSG["BAD_TOKEN"].format(token))
 
     @stack_needs(1)
     def do_acos(self):
@@ -586,4 +586,3 @@ class Evaluator:
 
     def push(self, value):
         self.stack.append(value)
-
