@@ -1,8 +1,10 @@
-import sys
 import os
 import os.path
 import re
 import readline  # Do not delete this line - needed for cmdline behavior
+import sys
+
+assert readline is not None
 
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
