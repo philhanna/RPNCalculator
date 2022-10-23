@@ -1,4 +1,4 @@
-""" Expression evaluator """
+EXIT = "EXIT"
 
 
 def get_version():
@@ -32,7 +32,7 @@ def stack_needs(n):
     return decorator
 
 
-from .ev import Evaluator, EXIT
+from .ev import Evaluator
 from .ev_help import EVHelp
 
 __all__ = [
