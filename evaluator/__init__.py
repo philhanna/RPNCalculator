@@ -1,11 +1,8 @@
 """ Expression evaluator """
-import re
-
-from .ev import Evaluator, EXIT
-from .ev_help import EVHelp
 
 
 def get_version():
+    import re
     import subprocess
     version = None
     cp = subprocess.run(['pip', 'show', 'RPNCalculator'], stdout=subprocess.PIPE)
@@ -19,8 +16,28 @@ def get_version():
     return version
 
 
+def stack_needs(n):
+    """ Decorator for stack checking """
+
+    def decorator(fun):
+        def wrapper(*args):
+            stack = args[0].stack
+            if len(stack) < n:
+                print(Evaluator.MSG["EMPTY"])
+            else:
+                fun(*args)
+
+        return wrapper
+
+    return decorator
+
+
+from .ev import Evaluator, EXIT
+from .ev_help import EVHelp
+
 __all__ = [
     'get_version',
+    'stack_needs',
     'EVHelp',
     'Evaluator',
     'EXIT',

@@ -2,30 +2,15 @@ import os
 import os.path
 import re
 import readline  # Do not delete this line - needed for cmdline behavior
-import sys
+
+from evaluator import stack_needs
 
 assert readline is not None
+import sys
 
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
 from evaluator.ev_help import EVHelp
-
-
-def stack_needs(n):
-    """ Decorator for stack checking """
-
-    def decorator(fun):
-        def wrapper(*args):
-            stack = args[0].stack
-            if len(stack) < n:
-                print(Evaluator.MSG["EMPTY"])
-            else:
-                fun(*args)
-
-        return wrapper
-
-    return decorator
-
 
 EXIT = "EXIT"
 
