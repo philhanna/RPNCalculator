@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Moved stack_needs decorator to `__init__.py`
+- Code reformatted by PyCharm
+- Prevented `import readline` from being optimized away
 
 ## [1.8.0] - 2022-10-22
 
