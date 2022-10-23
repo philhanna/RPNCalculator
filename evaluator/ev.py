@@ -1,14 +1,14 @@
 import os
 import os.path
 import re
-import readline  # Do not delete this line - needed for cmdline behavior
+import readline
 import sys
 
 from evaluator import stack_needs, EXIT
 from evaluator.ev_help import EVHelp
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
-assert readline is not None
+assert readline is not None  # Do not delete this line - needed for cmdline behavior
 
 
 class Evaluator:
