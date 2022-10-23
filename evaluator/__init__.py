@@ -1,8 +1,8 @@
 """ Expression evaluator """
 import re
 
-from .ev_help import EVHelp
 from .ev import Evaluator, EXIT
+from .ev_help import EVHelp
 
 
 def get_version():

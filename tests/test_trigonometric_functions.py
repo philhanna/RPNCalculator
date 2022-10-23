@@ -1,4 +1,5 @@
 import unittest
+
 from mpmath import e, pi, radians, sin, cos
 
 from evaluator import Evaluator

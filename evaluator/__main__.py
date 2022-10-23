@@ -1,5 +1,6 @@
 import argparse
-from evaluator import Evaluator, EXIT, get_version
+
+from evaluator import Evaluator, get_version
 
 parser = argparse.ArgumentParser(description="""
 `ev` is an interactive programmable RPN calculator.  (Enter "help RPN"
@@ -24,4 +25,3 @@ parser.add_argument('--noprofile', action='store_true',
 args = parser.parse_args()
 ev = Evaluator()
 ev.run(args)
-

@@ -1,6 +1,7 @@
 # Change Log
+
 All notable changes to this project will be documented in this file.
- 
+
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
@@ -19,6 +20,7 @@ Notable changes for each version:
 ## 1.8.0 - 2022/10/22
 
 ### Added
+
 - This `CHANGELOG.md`.
 - `__main__.py` in package so that it can be called with `python -m evaluator`
 
@@ -27,6 +29,7 @@ Notable changes for each version:
 Refactored main body of `Evaluator` class to reduce code complexity.
 Instead of a long series of `if` statements, now uses dictionaries
 that map command names to handler functions:
+
 ```
 full_line_commands = {
     'HELP': self.do_help,
@@ -87,7 +90,9 @@ commands = {
     'SHELL': self.do_shell,
 }
 ```
+
 These are used by lookups:
+
 ```
 if kwd in full_line_commands:
             full_line_commands[kwd](rest)
@@ -95,8 +100,6 @@ if kwd in full_line_commands:
 ...
 commands[token]()
 ```
-
-
 
 ## 1.7.1 - 2022/09/19
 
@@ -111,8 +114,9 @@ Added `/mod` (divmod) operator
 ## 1.6.1 - 2022/08/28
 
 Now using [mpmath](https://mpmath.org/) for real and complex floating-point arithmetic
-with arbitrary precision.  This is controlled by the `digits &lt;n&gt;` command.
+with arbitrary precision. This is controlled by the `digits &lt;n&gt;` command.
 For example:
+
 ```
 ev> 2 sqrt .
 1.4142135623731
@@ -120,6 +124,7 @@ ev> digits 60
 ev> 2 sqrt .
 1.41421356237309504880168872420969807856967187537694807317668
 ```
+
 This can be set in `.evrc` if desired.
 
 Increased unit test coverage by adding unit tests:
@@ -141,7 +146,6 @@ Increased unit test coverage by adding unit tests:
 - Dump stack
 
 Also updated help text to include the changes
-
 
 ## 1.5.0 - 2022/08/20
 

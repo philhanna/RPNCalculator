@@ -51,9 +51,12 @@ class TestDump(TestCase):
         for i, line in enumerate(fp):
             tokens = line.split()
             match i:
-                case 0: self.assertListEqual(["VAR", "ADDR", "VALUE"], tokens)
-                case 1: self.assertListEqual(["interest", "0001", "0.08"], tokens)
-                case 2: self.assertListEqual(["term", "0002", "30.0"], tokens)
+                case 0:
+                    self.assertListEqual(["VAR", "ADDR", "VALUE"], tokens)
+                case 1:
+                    self.assertListEqual(["interest", "0001", "0.08"], tokens)
+                case 2:
+                    self.assertListEqual(["term", "0002", "30.0"], tokens)
         fp.close()
 
     def test_dump_variables_none_defined(self):
@@ -74,8 +77,10 @@ class TestDump(TestCase):
         for i, line in enumerate(fp):
             tokens = line.split()
             match i:
-                case 0: self.assertListEqual(["VAR", "ADDR", "VALUE"], tokens)
-                case 1: self.assertListEqual(["interest", "0001", "0"], tokens)
+                case 0:
+                    self.assertListEqual(["VAR", "ADDR", "VALUE"], tokens)
+                case 1:
+                    self.assertListEqual(["interest", "0001", "0"], tokens)
         fp.close()
 
     def test_dump_constants(self):
@@ -88,8 +93,10 @@ class TestDump(TestCase):
         for i, line in enumerate(fp):
             tokens = line.split()
             match i:
-                case 0: self.assertListEqual(["CONSTANT", "VALUE"], tokens)
-                case 1: self.assertListEqual(["daylight", "1440.0"], tokens)
+                case 0:
+                    self.assertListEqual(["CONSTANT", "VALUE"], tokens)
+                case 1:
+                    self.assertListEqual(["daylight", "1440.0"], tokens)
         fp.close()
 
     def test_dump_constants_none_defined(self):
