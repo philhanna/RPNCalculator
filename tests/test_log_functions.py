@@ -13,18 +13,18 @@ class TestLogFunctions(unittest.TestCase):
 
     def test_exp(self):
         self.ev.ev("2 exp")
-        actual = self.ev.pop()
+        actual = self.ev.pop().value
         expected = 7.389056098
         self.assertAlmostEqual(expected, actual)
 
     def test_ln(self):
         self.ev.ev("2 ln")
-        actual = self.ev.pop()
+        actual = self.ev.pop().value
         expected = 0.6931471805599453
         self.assertAlmostEqual(expected, actual)
 
     def test_log(self):
         self.ev.ev("2 log")
-        actual = self.ev.pop()
+        actual = self.ev.pop().value
         expected = 0.301029995663981
         self.assertAlmostEqual(expected, actual)

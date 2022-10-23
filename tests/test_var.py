@@ -32,7 +32,7 @@ class TestVariable(TestCase):
         self.ev.ev("1 3 / amount !")
         self.ev.ev("amount @")
         expected = .3333333333333333
-        actual = self.ev.pop()
+        actual = self.ev.pop().value
         self.assertAlmostEqual(expected, actual)
 
     def test_fetch_bad(self):

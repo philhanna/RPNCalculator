@@ -80,7 +80,7 @@ class TestDump(TestCase):
                 case 0:
                     self.assertListEqual(["VAR", "ADDR", "VALUE"], tokens)
                 case 1:
-                    self.assertListEqual(["interest", "0001", "0"], tokens)
+                    self.assertListEqual(["interest", "0001", "None"], tokens)
         fp.close()
 
     def test_dump_constants(self):

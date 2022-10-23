@@ -3,8 +3,9 @@ import os.path
 import re
 import readline
 import sys
+from pathlib import Path
 
-from evaluator import stack_needs, EXIT
+from evaluator import stack_needs, EXIT, NumberEntry
 from evaluator.ev_help import EVHelp
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
@@ -148,17 +149,23 @@ class Evaluator:
             if token in ['Q', 'QUIT', 'EXIT']:
                 return EXIT
             if self.is_numeric(token):
-                self.push(mpf(token))
+                result = NumberEntry(token)
+                self.push(result)
             elif token in self.variable:
-                self.push(self.variable[token])
+                result = self.variable[token]
+                self.push(result)
             elif token in self.constant:
-                self.push(self.constant[token])
+                result = self.constant[token]
+                self.push(result)
             elif token in self.function:
-                self.ev(self.function[token])
+                result = self.function[token]
+                self.ev(result)
             elif token == 'PI':
-                self.push(pi)
+                result = NumberEntry(pi)
+                self.push(result)
             elif token == 'E':
-                self.push(e)
+                result = NumberEntry(e)
+                self.push(result)
             elif token in commands:
                 commands[token]()
             else:
@@ -166,38 +173,44 @@ class Evaluator:
 
     @stack_needs(1)
     def do_acos(self):
-        x = self.pop()
+        x = self.pop().value
         y = acos(x)
-        self.push(y)
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(2)
     def do_add(self):
         """ Adds two elements at top of stack """
-        f2 = self.pop()
-        f1 = self.pop()
-        self.push(f1 + f2)
+        f2 = self.pop().value
+        f1 = self.pop().value
+        result = NumberEntry(f1 + f2)
+        self.push(result)
 
     @stack_needs(1)
     def do_asin(self):
-        x = self.pop()
+        x = self.pop().value
         y = asin(x)
-        self.push(y)
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(1)
     def do_atan(self):
-        x = self.pop()
+        x = self.pop().value
         y = atan(x)
-        self.push(y)
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(2)
     def do_atan2(self):
-        f2 = self.pop()
-        f1 = self.pop()
-        self.push(atan2(f1, f2))
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = atan2(f1, f2)
+        result = NumberEntry(y)
+        self.push(result)
 
     def do_clear(self):
         """ Clears the stack """
-        self.stack = []
+        self.stack.clear()
 
     def do_const(self, line):
         """ Defines a constant """
@@ -206,27 +219,30 @@ class Evaluator:
         if len(tokens) < 2:
             print(Evaluator.MSG["BAD_CONST"])
             return
+        #   The constant value needs to be calculated
+        constname, *program = tokens
+        constprogram = ' '.join(program)
+        d1 = len(self.stack)
+        self.ev(constprogram)
+        d2 = len(self.stack)
+        if d2 == (d1 + 1):
+            self.constant[constname] = self.pop()
         else:
-            #   The constant value needs to be calculated
-            constname, *program = tokens
-            constprogram = ' '.join(program)
-            d1 = len(self.stack)
-            self.ev(constprogram)
-            d2 = len(self.stack)
-            if d2 == (d1 + 1):
-                self.constant[constname] = self.pop()
-            else:
-                print(Evaluator.MSG["BAD_CONSTP"])
+            print(Evaluator.MSG["BAD_CONSTP"])
 
     @stack_needs(1)
     def do_cos(self):
-        f1 = self.pop()
-        self.push(cos(f1))
+        f1 = self.pop().value
+        y = cos(f1)
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(1)
     def do_decrement(self):
-        f1 = self.pop()
-        self.push(f1 - 1)
+        f1 = self.pop().value
+        y = f1 - 1
+        result = NumberEntry(y)
+        self.push(result)
 
     def do_define(self, line):
         tokens = line.split()
@@ -240,7 +256,9 @@ class Evaluator:
 
     def do_depth(self):
         """ (a1 a2 ... an -- a1 a2 ... an n) """
-        self.push(len(self.stack))
+        y = len(self.stack)
+        result = NumberEntry(y)
+        self.push(result)
 
     @staticmethod
     def do_digits(line):
@@ -253,18 +271,17 @@ class Evaluator:
             mp.dps = digits
         except ValueError:
             print(Evaluator.MSG["BAD_DIGITS"].format(tokens[0]))
-        finally:
-            pass
 
     @stack_needs(2)
     def do_div(self):
-        f2 = self.pop()
+        f2 = self.pop().value
         if f2 == 0:
             print(Evaluator.MSG["DIVIDE_BY_0"])
             return
-        f1 = self.pop()
-        output = f1 / f2
-        self.push(output)
+        f1 = self.pop().value
+        y = f1 / f2
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(1)
     def do_drop(self):
@@ -277,14 +294,23 @@ class Evaluator:
 
     @stack_needs(1)
     def do_exp(self):
-        x = self.pop()
-        result = exp(x)
+        x = self.pop().value
+        y = exp(x)
+        result = NumberEntry(y)
         self.push(result)
 
     @stack_needs(1)
     def do_fetch(self):
-        """ Pushes the current value of a variable """
-        f1 = int(self.pop())
+        """Returns the current value of a variable
+
+        The value on the stack is the address of the variable (index into memory array)
+        and so must be an integer
+        """
+        test = self.pop()
+        if isinstance(test, int):
+            f1 = test
+        else:
+            f1 = test.value
         if f1 < 1 or f1 >= len(self.memory):
             print(Evaluator.MSG["BAD_VARNUM"].format(f1))
             return
@@ -296,17 +322,23 @@ class Evaluator:
 
     @stack_needs(1)
     def do_increment(self):
-        f1 = self.pop()
-        self.push(f1 + 1)
+        f1 = self.pop().value
+        y = f1 + 1
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(1)
     def do_int(self):
-        f1 = self.pop()
-        self.push(int(f1))
+        f1 = self.pop().value
+        y = int(f1)
+        result = NumberEntry(y)
+        self.push(result)
 
     def do_load(self, filename):
         # Remove quotes if present
-        filename = re.sub('"', '', filename)
+        filename = str(filename)
+        filename = filename.replace("'", "")
+        filename = filename.replace('"', "")
         try:
             with open(filename, "r") as f:
                 for line in f:
@@ -321,99 +353,112 @@ class Evaluator:
 
     @stack_needs(1)
     def do_ln(self):
-        x = self.pop()
+        x = self.pop().value
         y = ln(x)
-        self.push(y)
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(1)
     def do_log(self):
-        x = self.pop()
+        x = self.pop().value
         y = log10(x)
-        self.push(y)
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(2)
     def do_mod(self):
-        f2 = self.pop()
+        f2 = self.pop().value
         if f2 == 0:
             print(Evaluator.MSG["DIVIDE_BY_0"])
             return
-        f1 = self.pop()
-        output = f1 % f2
-        self.push(output)
+        f1 = self.pop().value
+        y = f1 % f2
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(2)
     def do_divmod(self):
-        f2 = round(self.pop())
+        value = self.pop().value
+        f2 = round(value)
         if f2 == 0:
             print(Evaluator.MSG["DIVIDE_BY_0"])
             return
-        f1 = round(self.pop())
+        value = self.pop().value
+        f1 = round(value)
         q, r = divmod(f1, f2)
-        self.push(r)
-        self.push(q)
+        result = NumberEntry(r)
+        self.push(result)
+        result = NumberEntry(q)
+        self.push(result)
 
     @stack_needs(2)
     def do_mult(self):
         """ Multiplies two elements at top of stack """
-        f2 = self.pop()
-        f1 = self.pop()
-        self.push(f1 * f2)
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = f1 * f2
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(2)
     def do_over(self):
         """ (x y -- x y x) """
-        f2 = self.pop()
-        f1 = self.pop()
-        self.push(f1)
-        self.push(f2)
-        self.push(f1)
+        #OVER is type-agnostic
+        y = self.pop()
+        x = self.pop()
+        self.push(x)
+        self.push(y)
+        self.push(x)
 
     @stack_needs(2)
     def do_pow(self):
-        f2 = self.pop()
-        f1 = self.pop()
+        f2 = self.pop().value
+        f1 = self.pop().value
         if f1 <= 0:
             print(Evaluator.MSG["NEGATIVE_BASE"].format(f1))
             return
         if f2 == int(f2):
-            result = f1 ** f2
+            y = f1 ** f2
         else:
-            result = power(f1, f2)
+            y = power(f1, f2)
+        result = NumberEntry(y)
         self.push(result)
 
     @stack_needs(1)
     def do_print(self):
-        f1 = self.pop()
+        f1 = self.pop().value
         print(f1)
 
     @stack_needs(3)
     def do_rotate(self):
         """ (a b c) -- (b c a) """
-        f3 = self.pop()
-        f2 = self.pop()
-        f1 = self.pop()
-        self.push(f2)
-        self.push(f3)
-        self.push(f1)
+        # ROT is type-agnostic
+        c = self.pop()
+        b = self.pop()
+        a = self.pop()
+        self.push(b)
+        self.push(c)
+        self.push(a)
 
     def do_save(self, filename):
         """ Saves all functions, constants, and variables
         """
-
-        #   Open the output file
+        # Open the output file
         if not filename:
             print(Evaluator.MSG["NO_FILENAME"])
             return
 
-        #   Remove quotes from filename, if present
-        filename = re.sub('"', '', filename)
+        # Remove quotes from filename, if present
+        filename = str(filename)
+        filename = filename.replace("'", "")
+        filename = filename.replace('"', "")
 
         with open(filename, "wt") as OFILE:
 
-            #   Save digits of precision
+            # Save digits of precision
             OFILE.write(f"digits {mp.dps}\n")
 
-            #   Save constants
+            # Save constants
             if self.constant:
                 for cname in sorted(self.constant):
                     OFILE.write(f"const {cname.lower()} {self.constant[cname]}\n")
@@ -422,7 +467,7 @@ class Evaluator:
                     filename
                 ))
 
-            #   Save variables (both definitions and values)
+            # Save variables (both definitions and values)
             if self.variable:
                 names = [name for name in sorted(self.variable)]
                 OFILE.write("var {names}\n".format(
@@ -441,7 +486,7 @@ class Evaluator:
                     filename
                 ))
 
-            #   Save the function definitions
+            # Save the function definitions
             if self.function:
                 for fname in sorted(self.function):
                     OFILE.write("define {name} {body}\n".format(
@@ -463,21 +508,32 @@ class Evaluator:
 
     @stack_needs(1)
     def do_sin(self):
-        f1 = self.pop()
-        self.push(sin(f1))
+        f1 = self.pop().value
+        y = sin(f1)
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(1)
     def do_sqrt(self):
-        f1 = self.pop()
+        f1 = self.pop().value
         if f1 < 0:
             print(Evaluator.MSG["BAD_SQRT"].format(f1))
             return
-        result = sqrt(f1)
+        y = sqrt(f1)
+        result = NumberEntry(y)
         self.push(result)
 
     @stack_needs(2)
     def do_store(self):
-        f2 = int(self.pop())
+        # value is the variable's address (slot in the memory array)
+        # and so needs to be an integer
+        value = self.pop()
+        f2 = value
+        if isinstance(value, int):
+            f2 = value
+        elif isinstance(value, NumberEntry):
+            f2 = value.value
+            f2 = int(f2)
         if f2 < 1 or f2 >= len(self.memory):
             print(Evaluator.MSG["BAD_VARNUM"].format(f2))
             return
@@ -487,12 +543,13 @@ class Evaluator:
     @stack_needs(2)
     def do_sub(self):
         """ Subtracts two elements at top of stack """
-        f2 = self.pop()
-        f1 = self.pop()
-        self.push(f1 - f2)
+        f2 = self.pop().value
+        f1 = self.pop().value
+        self.push(NumberEntry(f1 - f2))
 
     @stack_needs(2)
     def do_swap(self):
+        # SWAP is type-agnostic
         f2 = self.pop()
         f1 = self.pop()
         self.push(f2)
@@ -500,19 +557,23 @@ class Evaluator:
 
     @stack_needs(1)
     def do_tan(self):
-        f1 = self.pop()
-        self.push(tan(f1))
+        f1 = self.pop().value
+        y = tan(f1)
+        result = NumberEntry(y)
+        self.push(result)
 
     @stack_needs(1)
     def do_to_degrees(self):
-        f1 = self.pop()
-        result = f1 * 180. / pi
+        f1 = self.pop().value
+        y = f1 * 180. / pi
+        result = NumberEntry(y)
         self.push(result)
 
     @stack_needs(1)
     def do_to_radians(self):
-        f1 = self.pop()
-        result = f1 * pi / 180.0
+        f1 = self.pop().value
+        y = f1 * pi / 180.0
+        result = NumberEntry(y)
         self.push(result)
 
     def do_variable(self, line):
@@ -522,19 +583,19 @@ class Evaluator:
             # Ignore if variable is already defined
             if varname in self.variable:
                 continue
-            self.memory.append(0)
+            self.memory.append(None)
             self.variable[varname] = len(self.memory) - 1
 
     def dump_constants(self):
-        if not len(self.constant):
+        if not self.constant or len(self.constant) == 0:
             return
         print("CONSTANT        VALUE")
         for constname in sorted(self.constant.keys()):
-            value = self.constant[constname]
+            value = self.constant[constname].value
             print(f"{constname.lower():<8s}        {value}")
 
     def dump_functions(self):
-        if not len(self.function):
+        if not self.function or len(self.function) == 0:
             return
         print("FUNCTION  DEFINITION")
         for fname in sorted(self.function):
@@ -545,17 +606,19 @@ class Evaluator:
                 definition=lcdef))
 
     def dump_stack(self):
-        for value in self.stack:
-            print(value)
+        for stack_entry in self.stack:
+            print(stack_entry.value)
 
     def dump_variables(self):
-        if not len(self.variable):
+        if not self.variable or len(self.variable) == 0:
             return
         print("VAR       ADDR  VALUE")
         for varname in sorted(self.variable.keys()):
             lcname = varname.lower()
             addr = self.variable[varname]
             value = self.memory[addr]
+            if value is not None:
+                value = value.value
             print("{name:<8s}  {addr:04d}  {value}".format(
                 name=lcname,
                 addr=addr,
@@ -570,9 +633,8 @@ class Evaluator:
             return False
 
     def load_profile(self):
-        home = os.path.expanduser("~")
-        filename = os.path.join(home, ".evrc")
-        if os.path.exists(filename):
+        filename = Path.home().joinpath(".evrc")
+        if filename.exists():
             self.do_load(filename)
 
     def peek(self):
