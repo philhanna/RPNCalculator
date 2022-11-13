@@ -32,13 +32,14 @@ def stack_needs(n):
     return decorator
 
 
-from .stack_entry import StackEntry, NumberEntry
+from .stack_entry import StackEntry, NumberEntry, BooleanEntry
 from .ev import Evaluator
 from .ev_help import EVHelp
 
 __all__ = [
     'StackEntry',
     'NumberEntry',
+    'BooleanEntry',
     'get_version',
     'stack_needs',
     'EVHelp',

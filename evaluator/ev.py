@@ -1,11 +1,10 @@
 import os
 import os.path
-import re
 import readline
 import sys
 from pathlib import Path
 
-from evaluator import stack_needs, EXIT, NumberEntry
+from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry
 from evaluator.ev_help import EVHelp
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
@@ -132,6 +131,14 @@ class Evaluator:
             'INT': self.do_int,
             'DEPTH': self.do_depth,
             'SHELL': self.do_shell,
+            '>': self.do_greater_than,
+            '<': self.do_less_than,
+            '=': self.do_equal_to,
+            '==': self.do_equal_to,
+            '>=': self.do_greater_than_or_equal_to,
+            '<=': self.do_less_than_or_equal_to,
+            '!=': self.do_not_equal_to,
+            '<>': self.do_not_equal_to
         }
 
         #   Check for full line commands
@@ -316,6 +323,46 @@ class Evaluator:
             return
         self.push(self.memory[f1])
 
+    @stack_needs(2)
+    def do_less_than_or_equal_to(self):
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = f1 < f2
+        result = BooleanEntry(y)
+        self.push(result)
+
+    @stack_needs(2)
+    def do_less_than(self):
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = f1 < f2
+        result = BooleanEntry(y)
+        self.push(result)
+
+    @stack_needs(2)
+    def do_greater_than_or_equal_to(self):
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = f1 >= f2
+        result = BooleanEntry(y)
+        self.push(result)
+
+    @stack_needs(2)
+    def do_greater_than(self):
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = f1 > f2
+        result = BooleanEntry(y)
+        self.push(result)
+
+    @stack_needs(2)
+    def do_equal_to(self):
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = f1 == f2
+        result = BooleanEntry(y)
+        self.push(result)
+
     @staticmethod
     def do_help(topic):
         EVHelp(topic.upper())
@@ -398,6 +445,15 @@ class Evaluator:
         f1 = self.pop().value
         y = f1 * f2
         result = NumberEntry(y)
+        self.push(result)
+
+    @stack_needs(2)
+    def do_not_equal_to(self):
+        """Returns True if f1 != f2"""
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = f1 != f2
+        result = BooleanEntry(y)
         self.push(result)
 
     @stack_needs(2)

@@ -31,3 +31,15 @@ class NumberEntry(StackEntry):
     def __repr__(self):
         sb = f"{NumberEntry.__name__}({self.value})"
         return sb
+
+
+class BooleanEntry(StackEntry):
+    def __init__(self, value: bool):
+        super().__init__(value)
+
+    def __repr__(self):
+        sb = f"{BooleanEntry.__name__}({self.value})"
+        return sb
+
+
+
