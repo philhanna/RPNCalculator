@@ -7,16 +7,19 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-- Moved stack_needs decorator to `__init__.py`
-- Code reformatted by PyCharm
-- Prevented `import readline` from being optimized away
+- Added boolean comparison functions >, <, =, >=, <=, !=.
+- Moved `stack_needs` decorator to `__init__.py`.
+- Code reformatted by PyCharm.
+- Prevented `import readline` from being optimized away.
+- Switched to `subprocess.run` instead of `os.system`.
 
 ## [1.8.0] - 2022-10-22
 
 ### Added
 
 - This `CHANGELOG.md`.
-- `__main__.py` in package so that it can be called with `python -m evaluator`
+- `__main__.py` in package so that it can be called with `python -m evaluator`.  This
+also allows all code to be debugged through IDE.
 
 ### Changed
 
