@@ -1,6 +1,5 @@
-import os
-import os.path
 import readline
+import subprocess
 import sys
 from pathlib import Path
 
@@ -558,9 +557,9 @@ class Evaluator:
     def do_shell():
         """ Invokes a command line shell """
         if sys.platform.startswith("win"):
-            os.system("cmd /k")
+            subprocess.run("cmd /k", shell=True, check=True)
         else:
-            os.system("/usr/bin/gnome-terminal")
+            subprocess.run("/usr/bin/gnome-terminal", shell=True, check=True)
 
     @stack_needs(1)
     def do_sin(self):
