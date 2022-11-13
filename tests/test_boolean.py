@@ -1,6 +1,8 @@
+from io import StringIO
 from unittest import TestCase
 
 import evaluator
+from tests import stdout_redirected
 
 
 class TestBoolean(TestCase):
@@ -130,3 +132,11 @@ class TestBoolean(TestCase):
         expected = False
         actual = ev.pop().value
         self.assertEqual(expected, actual)
+
+    def test_true(self):
+        with StringIO() as out, stdout_redirected(out):
+            ev = self.ev
+            ev.ev("true .")
+            actual = out.getvalue()
+        expected = "True"
+        self.assertIn(expected, actual)

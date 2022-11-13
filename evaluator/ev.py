@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry
+from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE
 from evaluator.ev_help import EVHelp
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
@@ -130,6 +130,8 @@ class Evaluator:
             'INT': self.do_int,
             'DEPTH': self.do_depth,
             'SHELL': self.do_shell,
+            'TRUE': self.do_true,
+            'FALSE': self.do_false,
             '>': self.do_greater_than,
             '<': self.do_less_than,
             '=': self.do_equal_to,
@@ -303,6 +305,10 @@ class Evaluator:
         x = self.pop().value
         y = exp(x)
         result = NumberEntry(y)
+        self.push(result)
+
+    def do_false(self):
+        result = FALSE
         self.push(result)
 
     @stack_needs(1)
@@ -629,6 +635,10 @@ class Evaluator:
         f1 = self.pop().value
         y = f1 * pi / 180.0
         result = NumberEntry(y)
+        self.push(result)
+
+    def do_true(self):
+        result = TRUE
         self.push(result)
 
     def do_variable(self, line):

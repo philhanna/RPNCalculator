@@ -33,6 +33,8 @@ def stack_needs(n):
 
 
 from .stack_entry import StackEntry, NumberEntry, BooleanEntry
+TRUE = BooleanEntry(True)
+FALSE = BooleanEntry(False)
 from .ev import Evaluator
 from .ev_help import EVHelp
 
@@ -40,6 +42,8 @@ __all__ = [
     'StackEntry',
     'NumberEntry',
     'BooleanEntry',
+    'TRUE',
+    'FALSE',
     'get_version',
     'stack_needs',
     'EVHelp',
