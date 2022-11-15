@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+- Added logical operators AND, OR, NOT, XOR
 - Added boolean comparison functions >, <, =, >=, <=, !=.
 - Moved `stack_needs` decorator to `__init__.py`.
 - Code reformatted by PyCharm.
