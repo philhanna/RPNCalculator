@@ -18,7 +18,6 @@ def get_version():
 
 def stack_needs(n):
     """ Decorator for stack checking """
-
     def decorator(fun):
         def wrapper(*args):
             stack = args[0].stack
@@ -26,9 +25,7 @@ def stack_needs(n):
                 print(Evaluator.MSG["EMPTY"])
             else:
                 fun(*args)
-
         return wrapper
-
     return decorator
 
 

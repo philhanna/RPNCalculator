@@ -5,7 +5,7 @@ from pathlib import Path
 
 from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE
 from evaluator.ev_help import EVHelp
-from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
+from mpmath import acos, asin, atan, atan2, cos, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
 assert readline is not None  # Do not delete this line - needed to
 # prevent "import readline" from being optimized away
@@ -152,37 +152,42 @@ class Evaluator:
         kwd = tokens[0].upper()
         rest = " ".join(tokens[1:])
 
-        if kwd in full_line_commands:
-            full_line_commands[kwd](rest)
-            return
+        try:
+            if kwd in full_line_commands:
+                full_line_commands[kwd](rest)
+                return
 
-        #   Evaluate each token
-        for token in tokens:
-            token = token.upper()
-            if token in ['Q', 'QUIT', 'EXIT']:
-                return EXIT
-            if self.is_numeric(token):
-                result = NumberEntry(token)
-                self.push(result)
-            elif token in self.variable:
-                result = self.variable[token]
-                self.push(result)
-            elif token in self.constant:
-                result = self.constant[token]
-                self.push(result)
-            elif token in self.function:
-                result = self.function[token]
-                self.ev(result)
-            elif token == 'PI':
-                result = NumberEntry(pi)
-                self.push(result)
-            elif token == 'E':
-                result = NumberEntry(e)
-                self.push(result)
-            elif token in commands:
-                commands[token]()
-            else:
-                print(Evaluator.MSG["BAD_TOKEN"].format(token))
+            #   Evaluate each token
+            for token in tokens:
+                token = token.upper()
+                if token in ['Q', 'QUIT', 'EXIT']:
+                    return EXIT
+                if self.is_numeric(token):
+                    result = NumberEntry(token)
+                    self.push(result)
+                elif token in self.variable:
+                    result = self.variable[token]
+                    self.push(result)
+                elif token in self.constant:
+                    result = self.constant[token]
+                    self.push(result)
+                elif token in self.function:
+                    result = self.function[token]
+                    self.ev(result)
+                elif token == 'PI':
+                    result = NumberEntry(pi)
+                    self.push(result)
+                elif token == 'E':
+                    result = NumberEntry(mp.e)
+                    self.push(result)
+                elif token in commands:
+                    commands[token]()
+                else:
+                    errmsg = Evaluator.MSG["BAD_TOKEN"].format(token)
+                    raise RuntimeError(errmsg)
+        except RuntimeError as e:
+            errmsg = str(e)
+            print(errmsg)
 
     @stack_needs(1)
     def do_acos(self):
@@ -239,8 +244,9 @@ class Evaluator:
         line = line.upper()
         tokens = line.split()
         if len(tokens) < 2:
-            print(Evaluator.MSG["BAD_CONST"])
-            return
+            errmsg = Evaluator.MSG["BAD_CONST"]
+            raise RuntimeError(errmsg)
+
         #   The constant value needs to be calculated
         constname, *program = tokens
         constprogram = ' '.join(program)
@@ -250,7 +256,8 @@ class Evaluator:
         if d2 == (d1 + 1):
             self.constant[constname] = self.pop()
         else:
-            print(Evaluator.MSG["BAD_CONSTP"])
+            errmsg = Evaluator.MSG["BAD_CONSTP"]
+            raise RuntimeError(errmsg)
 
     @stack_needs(1)
     def do_cos(self):
@@ -271,8 +278,8 @@ class Evaluator:
         name = tokens[0].upper()
         tokens = tokens[1:]
         if not tokens:
-            print(Evaluator.MSG["NO_DEFINE"])
-            return
+            errmsg = Evaluator.MSG["NO_DEFINE"]
+            raise RuntimeError(errmsg)
         definition = ' '.join(tokens)
         self.function[name] = definition
 
@@ -292,14 +299,15 @@ class Evaluator:
             digits = int(tokens[0])
             mp.dps = digits
         except ValueError:
-            print(Evaluator.MSG["BAD_DIGITS"].format(tokens[0]))
+            errmsg = Evaluator.MSG["BAD_DIGITS"].format(tokens[0])
+            raise RuntimeError(errmsg)
 
     @stack_needs(2)
     def do_div(self):
         f2 = self.pop().value
         if f2 == 0:
-            print(Evaluator.MSG["DIVIDE_BY_0"])
-            return
+            errmsg = Evaluator.MSG["DIVIDE_BY_0"]
+            raise RuntimeError(errmsg)
         f1 = self.pop().value
         y = f1 / f2
         result = NumberEntry(y)
@@ -338,8 +346,8 @@ class Evaluator:
         else:
             f1 = test.value
         if f1 < 1 or f1 >= len(self.memory):
-            print(Evaluator.MSG["BAD_VARNUM"].format(f1))
-            return
+            errmsg = Evaluator.MSG["BAD_VARNUM"].format(f1)
+            raise RuntimeError(errmsg)
         self.push(self.memory[f1])
 
     @stack_needs(2)
@@ -415,7 +423,8 @@ class Evaluator:
                         continue
                     self.ev(line)
         except FileNotFoundError:
-            print(Evaluator.MSG["BAD_OPEN"].format(filename))
+            errmsg = Evaluator.MSG["BAD_OPEN"].format(filename)
+            raise RuntimeError(errmsg)
 
     @stack_needs(1)
     def do_ln(self):
@@ -435,8 +444,8 @@ class Evaluator:
     def do_mod(self):
         f2 = self.pop().value
         if f2 == 0:
-            print(Evaluator.MSG["DIVIDE_BY_0"])
-            return
+            errmsg = Evaluator.MSG["DIVIDE_BY_0"]
+            raise RuntimeError(errmsg)
         f1 = self.pop().value
         y = f1 % f2
         result = NumberEntry(y)
@@ -447,8 +456,8 @@ class Evaluator:
         value = self.pop().value
         f2 = round(value)
         if f2 == 0:
-            print(Evaluator.MSG["DIVIDE_BY_0"])
-            return
+            errmsg = Evaluator.MSG["DIVIDE_BY_0"]
+            raise RuntimeError(errmsg)
         value = self.pop().value
         f1 = round(value)
         q, r = divmod(f1, f2)
@@ -507,8 +516,8 @@ class Evaluator:
         f2 = self.pop().value
         f1 = self.pop().value
         if f1 <= 0:
-            print(Evaluator.MSG["NEGATIVE_BASE"].format(f1))
-            return
+            errmsg = Evaluator.MSG["NEGATIVE_BASE"].format(f1)
+            raise RuntimeError(errmsg)
         if f2 == int(f2):
             y = f1 ** f2
         else:
@@ -537,8 +546,8 @@ class Evaluator:
         """
         # Open the output file
         if not filename:
-            print(Evaluator.MSG["NO_FILENAME"])
-            return
+            errmsg = Evaluator.MSG["NO_FILENAME"]
+            raise RuntimeError(errmsg)
 
         # Remove quotes from filename, if present
         filename = str(filename)
@@ -554,10 +563,11 @@ class Evaluator:
             if self.constant:
                 for cname in sorted(self.constant):
                     OFILE.write(f"const {cname.lower()} {self.constant[cname]}\n")
-                print(Evaluator.MSG["CON_SAVED"].format(
+                errmsg = Evaluator.MSG["CON_SAVED"].format(
                     len(self.constant),
                     filename
-                ))
+                )
+                raise RuntimeError(errmsg)
 
             # Save variables (both definitions and values)
             if self.variable:
@@ -609,8 +619,8 @@ class Evaluator:
     def do_sqrt(self):
         f1 = self.pop().value
         if f1 < 0:
-            print(Evaluator.MSG["BAD_SQRT"].format(f1))
-            return
+            errmsg = Evaluator.MSG["BAD_SQRT"].format(f1)
+            raise RuntimeError(errmsg)
         y = sqrt(f1)
         result = NumberEntry(y)
         self.push(result)
@@ -627,8 +637,8 @@ class Evaluator:
             f2 = value.value
             f2 = int(f2)
         if f2 < 1 or f2 >= len(self.memory):
-            print(Evaluator.MSG["BAD_VARNUM"].format(f2))
-            return
+            errmsg = Evaluator.MSG["BAD_VARNUM"].format(f2)
+            raise RuntimeError(errmsg)
         f1 = self.pop()
         self.memory[f2] = f1
 
