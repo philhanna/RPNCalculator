@@ -7,7 +7,8 @@ from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE
 from evaluator.ev_help import EVHelp
 from mpmath import acos, asin, atan, atan2, cos, e, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
-assert readline is not None  # Do not delete this line - needed for cmdline behavior
+assert readline is not None  # Do not delete this line - needed to
+# prevent "import readline" from being optimized away
 
 
 class Evaluator:
@@ -139,7 +140,11 @@ class Evaluator:
             '>=': self.do_greater_than_or_equal_to,
             '<=': self.do_less_than_or_equal_to,
             '!=': self.do_not_equal_to,
-            '<>': self.do_not_equal_to
+            '<>': self.do_not_equal_to,
+            'AND': self.do_and,
+            'OR': self.do_or,
+            'NOT': self.do_not,
+            'XOR': self.do_xor,
         }
 
         #   Check for full line commands
@@ -192,6 +197,15 @@ class Evaluator:
         f2 = self.pop().value
         f1 = self.pop().value
         result = NumberEntry(f1 + f2)
+        self.push(result)
+
+    @stack_needs(2)
+    def do_and(self):
+        """Pushes f1 AND f2 onto the stack"""
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = f1 and f2
+        result = BooleanEntry(y)
         self.push(result)
 
     @stack_needs(1)
@@ -452,6 +466,14 @@ class Evaluator:
         result = NumberEntry(y)
         self.push(result)
 
+    @stack_needs(1)
+    def do_not(self):
+        """Pushes NOT f1 onto the stack"""
+        f1 = self.pop().value
+        y = not bool(f1)
+        result = BooleanEntry(y)
+        self.push(result)
+
     @stack_needs(2)
     def do_not_equal_to(self):
         """Returns True if f1 != f2"""
@@ -462,9 +484,18 @@ class Evaluator:
         self.push(result)
 
     @stack_needs(2)
+    def do_or(self):
+        """Pushes f1 OR f2 onto the stack"""
+        f2 = self.pop().value
+        f1 = self.pop().value
+        y = f1 or f2
+        result = BooleanEntry(y)
+        self.push(result)
+
+    @stack_needs(2)
     def do_over(self):
         """ (x y -- x y x) """
-        #OVER is type-agnostic
+        # OVER is type-agnostic
         y = self.pop()
         x = self.pop()
         self.push(x)
@@ -650,6 +681,16 @@ class Evaluator:
                 continue
             self.memory.append(None)
             self.variable[varname] = len(self.memory) - 1
+
+    @stack_needs(2)
+    def do_xor(self):
+        f2 = self.pop().value
+        f1 = self.pop().value
+        f2b = bool(f2)
+        f1b = bool(f1)
+        y = f2b != f1b
+        result = BooleanEntry(y)
+        self.push(result)
 
     def dump_constants(self):
         if not self.constant or len(self.constant) == 0:

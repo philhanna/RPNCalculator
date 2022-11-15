@@ -126,6 +126,27 @@ class TestBoolean(TestCase):
         actual = ev.pop().value
         self.assertEqual(expected, actual)
 
+    def test_not(self):
+        ev = self.ev
+        ev.ev("2 not")
+        expected = False
+        actual = ev.pop().value
+        self.assertEqual(expected, actual)
+
+    def test_not_when_false(self):
+        ev = self.ev
+        ev.ev("False not")
+        expected = True
+        actual = ev.pop().value
+        self.assertEqual(expected, actual)
+
+    def test_not_idempotent(self):
+        ev = self.ev
+        ev.ev("42 not not")
+        expected = True
+        actual = ev.pop().value
+        self.assertEqual(expected, actual)
+
     def test_not_equal_to_when_false(self):
         ev = self.ev
         ev.ev("1 1 !=")
@@ -140,3 +161,45 @@ class TestBoolean(TestCase):
             actual = out.getvalue()
         expected = "True"
         self.assertIn(expected, actual)
+
+    def test_and_when_false(self):
+        ev = self.ev
+        ev.ev("True 2 3 > and")
+        expected = False
+        actual = ev.pop().value
+        self.assertEqual(expected, actual)
+
+    def test_and_when_true(self):
+        ev = self.ev
+        ev.ev("2 3 < 4 5 < and")
+        expected = True
+        actual = ev.pop().value
+        self.assertEqual(expected, actual)
+
+    def test_or_when_false(self):
+        ev = self.ev
+        ev.ev("True 2 3 > or")
+        expected = True
+        actual = ev.pop().value
+        self.assertEqual(expected, actual)
+
+    def test_or_when_true(self):
+        ev = self.ev
+        ev.ev("2 3 < 4 5 < or")
+        expected = True
+        actual = ev.pop().value
+        self.assertEqual(expected, actual)
+
+    def test_xor_when_false(self):
+        ev = self.ev
+        ev.ev("False False xor")
+        expected = False
+        actual = ev.pop().value
+        self.assertEqual(expected, actual)
+
+    def test_xor(self):
+        ev = self.ev
+        ev.ev("2 6 xor")
+        expected = False
+        actual = ev.pop().value
+        self.assertEqual(expected, actual)
