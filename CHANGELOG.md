@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.9.0] - 2022-11-15
 - Added logical operators AND, OR, NOT, XOR
 - Added boolean comparison functions >, <, =, >=, <=, !=.
 - Moved `stack_needs` decorator to `__init__.py`.
@@ -157,7 +158,8 @@ Added MIT license.
 
 First workable version, based on the Perl version.
 
-[Unreleased]: https://github.com/philhanna/RPNCalculator/compare/1.8.0..HEAD
+[Unreleased]: https://github.com/philhanna/RPNCalculator/compare/1.9.0..HEAD
+[1.9.0]: https://github.com/philhanna/RPNCalculator/compare/1.8.0..1.9.0
 [1.8.0]: https://github.com/philhanna/RPNCalculator/compare/1.7.1..1.8.0
 [1.7.1]: https://github.com/philhanna/RPNCalculator/compare/1.7.0..1.7.1
 [1.7.0]: https://github.com/philhanna/RPNCalculator/compare/1.6.1..1.7.0
