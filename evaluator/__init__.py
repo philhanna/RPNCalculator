@@ -28,7 +28,6 @@ def stack_needs(n):
         return wrapper
     return decorator
 
-
 from .stack_entry import StackEntry, NumberEntry, BooleanEntry
 TRUE = BooleanEntry(True)
 FALSE = BooleanEntry(False)

@@ -23,5 +23,5 @@ parser.add_argument('-c', help='Execute commands before entering main loop')
 parser.add_argument('--noprofile', action='store_true',
                     help='Do not load profile from .evrc')
 args = parser.parse_args()
-ev = Evaluator()
+ev = Evaluator(debug=False)
 ev.run(args)

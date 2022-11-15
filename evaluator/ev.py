@@ -1,3 +1,4 @@
+import os
 import readline
 import subprocess
 import sys
@@ -42,14 +43,16 @@ class Evaluator:
         "VAR_SAVED": "{} variable definitions saved to {}",
     }
 
-    def __init__(self):
+    def __init__(self, debug=True):
         """ Creates a new Evaluator class """
+        self.debug = debug
         self.stack = []
         self.constant = {}
         self.function = {}
         self.variable = {}
         self.memory = [-1]
         self.helptext = {}
+        ...
 
     def run(self, args):
         #   Load the profile, if any
@@ -187,7 +190,10 @@ class Evaluator:
                     raise RuntimeError(errmsg)
         except RuntimeError as e:
             errmsg = str(e)
-            print(errmsg)
+            if self.debug:
+                raise e
+            else:
+                print(errmsg)
 
     @stack_needs(1)
     def do_acos(self):
