@@ -30,10 +30,11 @@ class TestSave(unittest.TestCase):
         try:
             with StringIO() as fp, stdout_redirected(fp):
                 self.ev.ev("const meaning 42")
-                self.ev.ev("var foo")
+                self.ev.ev("var addr")
+                self.ev.ev("7500 addr !")
                 self.ev.ev("define double dup 2 *")
                 self.ev.ev(f"save {filename}")
                 output = fp.getvalue()
             self.assertIn("saved to", output)
         finally:
-            os.remove(filename)
+            """ os.remove(filename) """

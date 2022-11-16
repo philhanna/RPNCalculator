@@ -3,7 +3,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE
+from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE, StackEntry
 from evaluator.ev_help import EVHelp
 from mpmath import acos, asin, atan, atan2, cos, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
@@ -562,12 +562,11 @@ class Evaluator:
             # Save constants
             if self.constant:
                 for cname in sorted(self.constant):
-                    OFILE.write(f"const {cname.lower()} {self.constant[cname]}\n")
-                errmsg = Evaluator.MSG["CON_SAVED"].format(
+                    OFILE.write(f"const {cname.lower()} {self.constant[cname].value}\n")
+                print(Evaluator.MSG["CON_SAVED"].format(
                     len(self.constant),
                     filename
-                )
-                raise RuntimeError(errmsg)
+                ))
 
             # Save variables (both definitions and values)
             if self.variable:
@@ -578,6 +577,8 @@ class Evaluator:
                 for vname in names:
                     index = self.variable[vname]
                     value = self.memory[index]
+                    if isinstance(value, StackEntry):
+                        value = value.value
                     OFILE.write("{value} {name} {token}\n".format(
                         value=value,
                         name=vname.lower(),
