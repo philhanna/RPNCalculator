@@ -22,10 +22,9 @@ class TestVariable(TestCase):
         self.assertEqual(expected, actual)
 
     def test_bad_store(self):
-        with StringIO() as fp, stdout_redirected(fp):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("4 -14 !")
-            output = fp.getvalue()
-        self.assertIn("Invalid memory reference", output)
+        self.assertIn("Invalid memory reference", str(ae.exception))
 
     def test_fetch(self):
         self.ev.ev("var amount")
@@ -36,13 +35,11 @@ class TestVariable(TestCase):
         self.assertAlmostEqual(expected, actual)
 
     def test_fetch_bad(self):
-        with StringIO() as fp, stdout_redirected(fp):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("-3 @")
-            output = fp.getvalue()
-        self.assertIn("Invalid memory reference, index=-3", output)
+        self.assertIn("Invalid memory reference, index=-3", str(ae.exception))
 
     def test_fetch_bad2(self):
-        with StringIO() as fp, stdout_redirected(fp):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("1000 @")
-            output = fp.getvalue()
-        self.assertIn("Invalid memory reference, index=1000", output)
+        self.assertIn("Invalid memory reference, index=1000", str(ae.exception))

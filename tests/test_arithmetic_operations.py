@@ -56,10 +56,10 @@ class TestArithmeticOperations(unittest.TestCase):
         self.assertAlmostEqual(expected, actual)
 
     def test_div_by_zero(self):
-        with StringIO() as out, stdout_redirected(out):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("10 0 /")
-            output = out.getvalue()
-        self.assertEqual("Cannot divide by zero\n", output)
+        errmsg = str(ae.exception)
+        self.assertIn("divide by zero", errmsg)
 
     def test_increment(self):
         self.ev.ev("2 ++")
@@ -90,10 +90,10 @@ class TestArithmeticOperations(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_mod_div_by_zero(self):
-        with StringIO() as fp, stdout_redirected(fp):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("14 0 %")
-            output = fp.getvalue()
-        self.assertIn("divide by zero", output)
+        errmsg = str(ae.exception)
+        self.assertIn("divide by zero", errmsg)
 
     def test_int(self):
         self.ev.ev("7 3 / int")
@@ -108,10 +108,10 @@ class TestArithmeticOperations(unittest.TestCase):
         self.assertEqual(expected, actual)
 
     def test_bad_sqrt(self):
-        with StringIO() as fp, stdout_redirected(fp):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("-3 sqrt")
-            output = fp.getvalue()
-        self.assertEqual("Cannot take the square root of the negative number -3.0\n", output)
+        errmsg = str(ae.exception)
+        self.assertIn("negative", errmsg)
 
     def test_pow(self):
         self.ev.ev("2 3 **")
@@ -126,16 +126,16 @@ class TestArithmeticOperations(unittest.TestCase):
         self.assertAlmostEqual(expected, actual)
 
     def test_pow_negative_base(self):
-        with StringIO() as fp, stdout_redirected(fp):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("-3 2 **")
-            output = fp.getvalue()
-        self.assertIn("Cannot exponentiate", output)
+        errmsg = str(ae.exception)
+        self.assertIn("Cannot exponentiate", errmsg)
 
     def test_pow_zero_base(self):
-        with StringIO() as fp, stdout_redirected(fp):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("0 2 **")
-            output = fp.getvalue()
-        self.assertIn("Cannot exponentiate", output)
+        errmsg = str(ae.exception)
+        self.assertIn("Cannot exponentiate", errmsg)
 
     def test_empty_stack(self):
         with StringIO() as fp, stdout_redirected(fp):

@@ -18,10 +18,9 @@ class TestLoad(unittest.TestCase):
         del self.ev
 
     def test_ev_bad_load(self):
-        with StringIO() as fp, stdout_redirected(fp):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("load bogus")
-            output = fp.getvalue()
-        self.assertIn("Could not", output)
+        self.assertIn("Could not", str(ae.exception))
 
     def test_ev_good_load(self):
         filename = os.path.join(tmp, "file1")

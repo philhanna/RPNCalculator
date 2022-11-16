@@ -23,8 +23,7 @@ class TestDigits(TestCase):
         self.assertEqual("3.14159265358979", output)
 
     def test_bad_digits(self):
-        with StringIO() as fp, stdout_redirected(fp):
-            ev = Evaluator()
+        ev = Evaluator()
+        with self.assertRaises(RuntimeError) as ae:
             ev.ev("digits asdf")
-            output = fp.getvalue().strip()
-        self.assertEqual("'asdf' is not a valid value for digits", output)
+        self.assertIn("'asdf'", str(ae.exception))

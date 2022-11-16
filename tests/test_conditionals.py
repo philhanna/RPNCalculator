@@ -12,7 +12,9 @@ class TestConditionals(TestCase):
         del self.ev
 
     def test_IF_outside_of_definition(self):
-        """Should fail, because I'm onlyl allowing IF-THEN-ELSE inside a function definition"""
+        """Should fail, because I'm only allowing IF-THEN-ELSE inside a function definition"""
         ev = self.ev
-        ev.ev("2 sqrt 1 > if")
-
+        with self.assertRaises(RuntimeError) as ae:
+            ev.ev("2 sqrt 1 > if")
+        errmsg = str(ae.exception)
+        self.assertIn("Unrecognized token", errmsg)

@@ -19,11 +19,10 @@ class TestSave(unittest.TestCase):
         del self.ev
 
     def test_ev_save_no_filename(self):
-        with StringIO() as fp, stdout_redirected(fp):
-            self.ev.ev("const meaning 42")
+        self.ev.ev("const meaning 42")
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev(f"save")
-            output = fp.getvalue()
-        self.assertIn("No file name", output)
+        self.assertIn("No file name", str(ae.exception))
 
     def test_ev_good_save(self):
         filename = os.path.join(tmp, "good_save")

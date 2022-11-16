@@ -14,10 +14,9 @@ class TestDefine(unittest.TestCase):
         del self.ev
 
     def test_ev_bad_define(self):
-        with StringIO() as fp, stdout_redirected(fp):
+        with self.assertRaises(RuntimeError) as ae:
             self.ev.ev("define bogus")
-            output = fp.getvalue()
-        self.assertIn("No function", output)
+        self.assertIn("No function", str(ae.exception))
 
     def test_ev_good_define(self):
         with StringIO() as fp, stdout_redirected(fp):
