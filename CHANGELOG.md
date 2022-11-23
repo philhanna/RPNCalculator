@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added 
+- Issue #16 - Use pandas DataFrames for output of .F, .C, and .V
 - Issue #15 - Raise exceptions rather than just printing error messages
 
 ## [1.9.0] - 2022-11-15
