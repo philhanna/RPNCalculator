@@ -3,7 +3,7 @@ import readline
 import subprocess
 import sys
 from pathlib import Path
-
+import pandas as pd
 from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE, StackEntry
 from evaluator.ev_help import EVHelp
 from mpmath import acos, asin, atan, atan2, cos, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
@@ -710,42 +710,62 @@ class Evaluator:
         self.push(result)
 
     def dump_constants(self):
+        # If there are no constants defined, skip this command
         if not self.constant or len(self.constant) == 0:
             return
-        print("CONSTANT        VALUE")
+
+        data = {
+            "CONSTANT": [],
+            "VALUE": [],
+        }
         for constname in sorted(self.constant.keys()):
             value = self.constant[constname].value
-            print(f"{constname.lower():<8s}        {value}")
+            data["CONSTANT"].append(constname.lower())
+            data["VALUE"].append(value)
+        df = pd.DataFrame(data)
+        print(df)
 
     def dump_functions(self):
+        # Ignore this request if there are no functions to display
         if not self.function or len(self.function) == 0:
             return
-        print("FUNCTION  DEFINITION")
+        data = {
+            'FUNCTION': [],
+            'DEFINITION': [],
+        }
         for fname in sorted(self.function):
             lcfname = fname.lower()
             lcdef = self.function[fname].lower()
-            print("{name:<8s}  {definition}".format(
-                name=lcfname,
-                definition=lcdef))
+            data['FUNCTION'].append(lcfname)
+            data['DEFINITION'].append(lcdef)
+        df = pd.DataFrame(data)
+        print(df)
 
     def dump_stack(self):
         for stack_entry in self.stack:
             print(stack_entry.value)
 
     def dump_variables(self):
+        # Skip if there are no variables defined
         if not self.variable or len(self.variable) == 0:
             return
-        print("VAR       ADDR  VALUE")
+
+        data = {
+            'VAR': [],
+            'ADDR': [],
+            'VALUE': [],
+        }
         for varname in sorted(self.variable.keys()):
             lcname = varname.lower()
             addr = self.variable[varname]
             value = self.memory[addr]
             if value is not None:
                 value = value.value
-            print("{name:<8s}  {addr:04d}  {value}".format(
-                name=lcname,
-                addr=addr,
-                value=value))
+            data['VAR'].append(lcname)
+            data['ADDR'].append(addr)
+            data['VALUE'].append(value)
+        df = pd.DataFrame(data)
+        print(df)
 
     @staticmethod
     def is_numeric(arg):
