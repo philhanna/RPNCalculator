@@ -5,7 +5,8 @@ setup(
     version='1.9.0',
     packages=['evaluator'],
     install_requires=[
-        'mpmath'
+        'mpmath',
+        'pandas',
     ],
     options={"bdist_wheel": {"universal": True}},
     url='https://github.com/philhanna/RPNCalculator',
