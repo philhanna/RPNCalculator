@@ -15,7 +15,7 @@ For help on an individual topic, type `help` *&lt;topic name&gt;*.
 
 To see a list of topics, type `help topics`.
 
-To exit from ev, type `q`;
+To exit from ev, type `q`
 
 ## Installation and setup
 
