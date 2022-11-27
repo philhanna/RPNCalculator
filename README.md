@@ -2,7 +2,7 @@ Source: [https://github.com/philhanna/RPNCalculator](https://github.com/philhann
 
 # OVERVIEW
 
-***ev*** is an interactive programmable RPN calculator.  (Type `help RPN`
+***ev*** is a high-precision programmable RPN calculator.  (Type `help RPN`
 for details about Reverse Polish Notation). It reads blank-delimited
 tokens from the input stream and interprets them one at a time using
 a syntax inspired by the FORTH programming language. Anything following
