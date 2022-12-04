@@ -1,4 +1,3 @@
-import os
 import readline
 import subprocess
 import sys
