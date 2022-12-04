@@ -1,3 +1,4 @@
+import pdb
 import readline
 import subprocess
 import sys
@@ -18,6 +19,7 @@ class Evaluator:
 
     #   Constants
     PROMPT = "ev> "
+    CONTINUATION_PROMPT = "(ev)> "
 
     #   Error messages
     MSG = {
@@ -68,8 +70,18 @@ class Evaluator:
 
         #   Main loop
         while True:
-            line = input(Evaluator.PROMPT)
-            rc = self.ev(line)
+            fullline = ""
+            prompt = Evaluator.PROMPT
+            while True:
+                line = input(prompt)
+                if line.endswith("\\"):
+                    line = line.rstrip("\\").rstrip() + " "
+                    fullline += line
+                    prompt = Evaluator.CONTINUATION_PROMPT
+                else:
+                    fullline += line
+                    break
+            rc = self.ev(fullline)
             if rc == EXIT:
                 return
 
@@ -422,13 +434,26 @@ class Evaluator:
         filename = filename.replace('"', "")
         try:
             with open(filename, "r") as f:
-                for line in f:
-                    line = line.strip()
-                    if not line:
-                        continue
-                    if line.startswith("#"):
-                        continue
-                    self.ev(line)
+                while True:
+                    fullline = ""
+                    while True:
+                        line = f.readline()
+                        if not line:
+                            break
+                        line = line.strip()
+                        if not line:
+                            continue
+                        if line.startswith("#"):
+                            continue
+                        if line.endswith("\\"):
+                            line = line.rstrip("\\").rstrip() + " "
+                            fullline += line
+                        else:
+                            fullline += line
+                            break
+                    if not fullline:
+                        break
+                    self.ev(fullline)
         except FileNotFoundError:
             errmsg = Evaluator.MSG["BAD_OPEN"].format(filename)
             raise RuntimeError(errmsg)
@@ -560,6 +585,7 @@ class Evaluator:
         filename = str(filename)
         filename = filename.replace("'", "")
         filename = filename.replace('"', "")
+        filename = Path(filename).expanduser()
 
         with open(filename, "wt") as OFILE:
 
