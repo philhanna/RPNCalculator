@@ -2,10 +2,12 @@ import readline
 import subprocess
 import sys
 from pathlib import Path
+
 import pandas as pd
+from mpmath import acos, asin, atan, atan2, cos, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
+
 from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE, StackEntry
 from evaluator.ev_help import EVHelp
-from mpmath import acos, asin, atan, atan2, cos, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
 
 assert readline is not None  # Do not delete this line - needed to
 # prevent "import readline" from being optimized away
