@@ -29,6 +29,7 @@ class Evaluator:
         "BAD_FORMAT": "Invalid format string  Should be printf-style.",
         "BAD_LOG": "Cannot take the log of a non-positive number",
         "BAD_OPEN": "Could not open file {}",
+        "BAD_SEE": "SEE must be followed by a function name, a constant name, or a variable name",
         "BAD_SQRT": "Cannot take the square root of the negative number {}",
         "BAD_TOKEN": "Unrecognized token {}",
         "BAD_VARNUM": "Invalid memory reference, index={}",
@@ -100,6 +101,7 @@ class Evaluator:
             'LOAD': self.do_load,
             'SAVE': self.do_save,
             'VAR': self.do_variable,
+            'SEE': self.do_see,
         }
 
         commands = {
@@ -633,6 +635,19 @@ class Evaluator:
                     len(self.function),
                     filename
                 ))
+
+    def do_see(self, line):
+        """Shows the details of a function, variable, or constant"""
+        name = line.upper()
+        if name in self.function:
+            print(f"function {name}: {self.function[name]}")
+        elif name in self.variable:
+            print(f"variable {name}: addr={self.variable[name]}, value={self.memory[self.variable[name]].value}")
+        elif name in self.constant:
+            print(f"constant {name}: {self.constant[name].value}")
+        else:
+            errmsg = Evaluator.MSG["BAD_SEE"]
+            raise RuntimeError(errmsg)
 
     @staticmethod
     def do_shell():
