@@ -1,11 +1,9 @@
 from io import StringIO
-from unittest import TestCase
-
 from evaluator import EVHelp, Evaluator
 from tests import stdout_redirected
 
 
-class TestHelp(TestCase):
+class TestHelp:
 
     def test_help(self):
         try:
@@ -13,7 +11,7 @@ class TestHelp(TestCase):
             with StringIO() as fp, stdout_redirected(fp):
                 ev.ev('help')
                 output = fp.getvalue()
-            self.assertTrue("Reverse Polish Notation" in output)
+            assert "Reverse Polish Notation" in output
         finally:
             del ev
 
@@ -22,25 +20,25 @@ class TestHelp(TestCase):
         with StringIO() as fp, stdout_redirected(fp):
             EVHelp(topic)
             output = fp.getvalue()
-        self.assertIn("OVERVIEW:", output)
+        assert "OVERVIEW:" in output
 
     def test_topics(self):
         topic = "topics"
         with StringIO() as fp, stdout_redirected(fp):
             EVHelp(topic)
             output = fp.getvalue()
-        self.assertIn("Stack functions:", output)
+        assert "Stack functions:" in output
 
     def test_cos(self):
         topic = "cos"
         with StringIO() as fp, stdout_redirected(fp):
             EVHelp(topic)
             output = fp.getvalue()
-        self.assertIn("cos:", output)
+        assert "cos:" in output
 
     def test_not_found(self):
         topic = "bogus"
         with StringIO() as fp, stdout_redirected(fp):
             EVHelp(topic)
             output = fp.getvalue()
-        self.assertIn("bogus", output)
+        assert "bogus" in output
