@@ -1,4 +1,3 @@
-import pdb
 import readline
 import subprocess
 import sys
