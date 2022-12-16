@@ -1,5 +1,6 @@
-from mpmath import e, pi, radians, sin, cos
 import pytest
+from mpmath import e, pi, radians, sin, cos
+
 from evaluator import Evaluator
 
 

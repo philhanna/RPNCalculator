@@ -1,7 +1,9 @@
-from pathlib import Path
 import tempfile
 from io import StringIO
+from pathlib import Path
+
 import pytest
+
 from evaluator import Evaluator
 from tests import stdout_redirected
 

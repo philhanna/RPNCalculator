@@ -1,5 +1,6 @@
-import pytest
 from io import StringIO
+
+import pytest
 
 from evaluator import Evaluator
 from tests import stdout_redirected

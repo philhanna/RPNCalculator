@@ -1,5 +1,4 @@
 from io import StringIO
-import pytest
 
 import evaluator
 from tests import stdout_redirected
