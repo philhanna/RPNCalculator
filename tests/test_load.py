@@ -1,29 +1,28 @@
-import os
+from pathlib import Path
 import tempfile
-import unittest
 from io import StringIO
-
+import pytest
 from evaluator import Evaluator
 from tests import stdout_redirected
 
 tmp = tempfile.gettempdir()
 
 
-class TestLoad(unittest.TestCase):
+class TestLoad:
 
-    def setUp(self):
+    def setup_method(self):
         self.ev = Evaluator()
 
-    def tearDown(self):
+    def teardown_method(self):
         del self.ev
 
     def test_ev_bad_load(self):
-        with self.assertRaises(RuntimeError) as ae:
+        with pytest.raises(RuntimeError) as ae:
             self.ev.ev("load bogus")
-        self.assertIn("Could not", str(ae.exception))
+        assert "Could not" in str(ae.value)
 
     def test_ev_good_load(self):
-        filename = os.path.join(tmp, "file1")
+        filename = Path(tmp).joinpath("file1")
         with open(filename, "w") as fp:
             print(" ", file=fp)
             print("const meaning 42", file=fp)
@@ -33,6 +32,6 @@ class TestLoad(unittest.TestCase):
                 self.ev.ev(f"load {filename}")
                 self.ev.ev("meaning .")
                 output = fp.getvalue()
-            self.assertIn("42", output)
+            assert "42" in output
         finally:
-            os.remove(filename)
+            filename.unlink()
