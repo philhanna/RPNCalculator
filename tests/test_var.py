@@ -1,16 +1,14 @@
-from io import StringIO
-from unittest import TestCase
+import pytest
 
 from evaluator import Evaluator
-from tests import stdout_redirected
 
 
-class TestVariable(TestCase):
+class TestVariable:
 
-    def setUp(self):
+    def setup_method(self):
         self.ev = Evaluator()
 
-    def tearDown(self):
+    def teardown_method(self):
         del self.ev
 
     def test_store(self):
@@ -19,12 +17,12 @@ class TestVariable(TestCase):
         self.ev.ev("amount")
         expected = 1
         actual = self.ev.pop()
-        self.assertEqual(expected, actual)
+        assert actual == expected
 
     def test_bad_store(self):
-        with self.assertRaises(RuntimeError) as ae:
+        with pytest.raises(RuntimeError) as ae:
             self.ev.ev("4 -14 !")
-        self.assertIn("Invalid memory reference", str(ae.exception))
+        assert "Invalid memory reference" in str(ae.value)
 
     def test_fetch(self):
         self.ev.ev("var amount")
@@ -32,14 +30,14 @@ class TestVariable(TestCase):
         self.ev.ev("amount @")
         expected = .3333333333333333
         actual = self.ev.pop().value
-        self.assertAlmostEqual(expected, actual)
+        pytest.approx(expected, actual)
 
     def test_fetch_bad(self):
-        with self.assertRaises(RuntimeError) as ae:
+        with pytest.raises(RuntimeError) as ae:
             self.ev.ev("-3 @")
-        self.assertIn("Invalid memory reference, index=-3", str(ae.exception))
+        assert "Invalid memory reference, index=-3" in str(ae.value)
 
     def test_fetch_bad2(self):
-        with self.assertRaises(RuntimeError) as ae:
+        with pytest.raises(RuntimeError) as ae:
             self.ev.ev("1000 @")
-        self.assertIn("Invalid memory reference, index=1000", str(ae.exception))
+        assert "Invalid memory reference, index=1000" in str(ae.value)
