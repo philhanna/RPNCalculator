@@ -20,7 +20,7 @@ function definitions.  It also allows save and restore operations.
 """,
         "topics": """
 Arithmetic operations:   +, -, *, /, %, /mod, **, 1+, 1-, int, sqrt
-Commands:                help, load, quit, save, shell
+Commands:                help, load, quit, save, see, shell
 Configuration:           profile
 Constants:               e, pi
 Conversion functions:    toDegrees, toRadians
@@ -117,6 +117,9 @@ save <filename>:  Saves the current state of the calculator,
 
                   The saved state can be restored with the 'load'
                   command.
+""",
+        "see": """
+see <name>: Shows the details of a function, variable, or constant
 """,
         "shell": """
 shell: Invokes a shell.

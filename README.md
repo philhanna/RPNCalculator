@@ -31,7 +31,7 @@ Then copy the mainline `ev` to a directory in your path.
 ## Commands by category
 
 * Arithmetic operations:   `+`, `-`, `*`, `/`, `%`, `/mod`, `**`, `1+`, `1-`, `int`, `sqrt`
-* Commands:                `help`, `load`, `quit`, `save`, `shell`
+* Commands:                `help`, `load`, `quit`, `save`, `see`, `shell`
 * Configuration:           `profile`
 * Constants:               `e`, `pi`
 * Conversion functions:    `toDegrees`, `toRadians`
