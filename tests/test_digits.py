@@ -1,18 +1,17 @@
 from io import StringIO
-from unittest import TestCase
-
+import pytest
 from evaluator import Evaluator
 from tests import stdout_redirected
 
 
-class TestDigits(TestCase):
+class TestDigits:
 
     def test_do_digits(self):
         with StringIO() as fp, stdout_redirected(fp):
             ev = Evaluator()
             ev.ev("digits")
             output = fp.getvalue().strip()
-        self.assertTrue(output.isdecimal())
+        assert output.isdecimal()
 
     def test_set_digits(self):
         with StringIO() as fp, stdout_redirected(fp):
@@ -20,10 +19,10 @@ class TestDigits(TestCase):
             ev.ev("digits 15")
             ev.ev("pi .")
             output = fp.getvalue().strip()
-        self.assertEqual("3.14159265358979", output)
+        assert "3.14159265358979" == output
 
     def test_bad_digits(self):
         ev = Evaluator()
-        with self.assertRaises(RuntimeError) as ae:
+        with pytest.raises(RuntimeError) as ae:
             ev.ev("digits asdf")
-        self.assertIn("'asdf'", str(ae.exception))
+        assert "'asdf'" in str(ae.value)
