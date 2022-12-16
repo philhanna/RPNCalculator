@@ -1,7 +1,8 @@
-import os
+from pathlib import Path
 import tempfile
-import unittest
 from io import StringIO
+
+import pytest
 
 from evaluator import Evaluator
 from tests import stdout_redirected
@@ -9,23 +10,22 @@ from tests import stdout_redirected
 tmp = tempfile.gettempdir()
 
 
-class TestSave(unittest.TestCase):
+class TestSave:
 
-    def setUp(self):
+    def setup_method(self):
         self.ev = Evaluator()
-        self.tmp = tempfile.gettempdir()
 
-    def tearDown(self):
+    def teardown_method(self):
         del self.ev
 
     def test_ev_save_no_filename(self):
         self.ev.ev("const meaning 42")
-        with self.assertRaises(RuntimeError) as ae:
+        with pytest.raises(RuntimeError) as ae:
             self.ev.ev(f"save")
-        self.assertIn("No file name", str(ae.exception))
+        assert "No file name" in str(ae.value)
 
     def test_ev_good_save(self):
-        filename = os.path.join(tmp, "good_save")
+        filename = Path(tmp).joinpath("good_save")
         try:
             with StringIO() as fp, stdout_redirected(fp):
                 self.ev.ev("const meaning 42")
@@ -34,6 +34,6 @@ class TestSave(unittest.TestCase):
                 self.ev.ev("define double dup 2 *")
                 self.ev.ev(f"save {filename}")
                 output = fp.getvalue()
-            self.assertIn("saved to", output)
+            assert "saved to" in output
         finally:
-            """ os.remove(filename) """
+            filename.unlink()
