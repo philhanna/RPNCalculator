@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 
 ### Added 
+- Converted unit tests to pytest
 - Issue #16 - Use pandas DataFrames for output of .F, .C, and .V
 - Issue #15 - Raise exceptions rather than just printing error messages
 
