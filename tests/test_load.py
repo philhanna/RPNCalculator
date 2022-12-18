@@ -1,8 +1,4 @@
-from pathlib import Path
-
 import pytest
-
-from tests import tmp
 
 
 def test_ev_bad_load(ev):
@@ -12,15 +8,13 @@ def test_ev_bad_load(ev):
 
 
 def test_ev_good_load(ev, capsys, tmp_path):
-    filename = tmp_path / "file1"
-    with open(filename, "w") as fp:
-        print(" ", file=fp)
-        print("const meaning 42", file=fp)
-        print("# quit", file=fp)
-    try:
-        ev.ev(f"load {filename}")
-        ev.ev("meaning .")
-        output = capsys.readouterr().out
-        assert "42" in output
-    finally:
-        filename.unlink()
+    testfile = tmp_path / "file1"
+    testfile.write_text("""\
+
+const meaning 42
+# quit
+""")
+    ev.ev(f"load {testfile}")
+    ev.ev("meaning .")
+    output = capsys.readouterr().out
+    assert "42" in output
