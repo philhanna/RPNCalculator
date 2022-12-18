@@ -1,36 +1,25 @@
-from io import StringIO
-
 import pytest
 
-from evaluator import Evaluator
-from tests import stdout_redirected
+
+def test_ev_bad_const(ev):
+    with pytest.raises(RuntimeError) as ae:
+        ev.ev("const bogus")
+    assert "Invalid syntax" in str(ae.value)
 
 
-class TestConst:
+def test_ev_good_const(ev):
+    ev.ev("const meaning-of-the-universe 42")
+    ev.ev("meaning-of-the-universe 42 =")
 
-    def setup_method(self):
-        self.ev = Evaluator()
 
-    def teardown_method(self):
-        del self.ev
+def test_ev_bad_constp(ev):
+    with pytest.raises(RuntimeError) as ae:
+        ev.ev("const bogus 47 45 ")
+    assert "Invalid syntax" in str(ae.value)
 
-    def test_ev_bad_const(self):
-        with pytest.raises(RuntimeError) as ae:
-            self.ev.ev("const bogus")
-        assert "Invalid syntax" in str(ae.value)
 
-    def test_ev_good_const(self):
-        self.ev.ev("const meaning-of-the-universe 42")
-        self.ev.ev("meaning-of-the-universe 42 =")
-
-    def test_ev_bad_constp(self):
-        with pytest.raises(RuntimeError) as ae:
-            self.ev.ev("const bogus 47 45 ")
-        assert "Invalid syntax" in str(ae.value)
-
-    def test_ev_good_constp(self):
-        with StringIO() as fp, stdout_redirected(fp):
-            self.ev.ev("const meaning-of-the-universe 21 2 *")
-            self.ev.ev("meaning-of-the-universe .")
-            output = fp.getvalue()
-        assert "42" in output
+def test_ev_good_constp(ev, capsys):
+    ev.ev("const meaning-of-the-universe 21 2 *")
+    ev.ev("meaning-of-the-universe .")
+    output = capsys.readouterr().out
+    assert "42" in output
