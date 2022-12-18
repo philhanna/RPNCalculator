@@ -56,4 +56,3 @@ def test_output(ev, test_input, expected, capsys):
     ev.ev(test_input)
     actual = capsys.readouterr().out
     assert expected in actual
-

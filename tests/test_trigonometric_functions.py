@@ -1,6 +1,6 @@
 import pytest
+from mpmath import e, pi
 from pytest import approx
-from mpmath import e, pi, radians, sin, cos
 
 
 @pytest.mark.parametrize("test_input, expected", [

@@ -4,6 +4,7 @@ from contextlib import contextmanager
 
 tmp = tempfile.gettempdir()
 
+
 # redirect stdout technique from https://www.python.org/dev/peps/pep-0343/
 
 @contextmanager
