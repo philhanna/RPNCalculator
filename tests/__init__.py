@@ -1,6 +1,8 @@
 import sys
+import tempfile
 from contextlib import contextmanager
 
+tmp = tempfile.gettempdir()
 
 # redirect stdout technique from https://www.python.org/dev/peps/pep-0343/
 
@@ -25,5 +27,5 @@ def stdin_redirected(new_stdin):
 
 
 __all__ = [
-    'stdout_redirected', 'stdin_redirected',
+    'tmp', 'stdout_redirected', 'stdin_redirected',
 ]
