@@ -1,204 +1,55 @@
-from io import StringIO
-
-import evaluator
-from tests import stdout_redirected
+import pytest
 
 
-class TestBoolean:
+@pytest.mark.parametrize("cmdline,fname,expected", [
+    ("2 3", "do_greater_than", False),
+    ("3 2", "do_greater_than", True),
+    ("3 2", "do_less_than", False),
+    ("2 3", "do_less_than", True),
+    ("3 3", "do_equal_to", True),
+    ("1 3", "do_equal_to", False),
+    ("3 4", "do_not_equal_to", True),
+    ("3 3", "do_not_equal_to", False),
+])
+def test_boolean(ev, cmdline, fname, expected):
+    ev.ev(cmdline)
+    exec(f"ev.{fname}()")
+    actual = ev.pop().value
+    assert actual == expected
 
-    def setup_method(self) -> None:
-        self.ev = evaluator.Evaluator()
 
-    def teardown_method(self) -> None:
-        del self.ev
+@pytest.mark.parametrize("cmdline,expected", [
+    ("10 11 >", False),
+    ("10 11 >=", False),
+    ("11 3 >", True),
+    ("11 10 <", False),
+    ("3 11 <", True),
+    ("11 11 =", True),
+    ("111 112 =", False),
+    ("11 12 !=", True),
+    ("2 not", False),
+    ("False not", True),
+    ("42 not not", True),
+    ("1 1 !=", False),
+    ("True 2 3 > and", False),
+    ("2 3 < 4 5 < and", True),
+    ("True 2 3 > or", True),
+    ("2 3 < 4 5 < or", True),
+    ("False false xor", False),
+    ("2 6 xor", False),
+])
+def test_boolean_by_command(ev, cmdline, expected):
+    ev.ev(cmdline)
+    actual = ev.pop().value
+    assert actual == expected
 
-    def test_do_greater_than_when_false(self):
-        ev = self.ev
-        ev.ev("2 3")
-        ev.do_greater_than()
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
 
-    def test_do_greater_than_when_true(self):
-        ev = self.ev
-        ev.ev("3 2")
-        ev.do_greater_than()
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
+@pytest.mark.parametrize("test_input,expected", [
+    ("true .", "True"),
+    ("false .", "False"),
+])
+def test_output(ev, test_input, expected, capsys):
+    ev.ev(test_input)
+    actual = capsys.readouterr().out
+    assert expected in actual
 
-    def test_greater_than_when_false(self):
-        ev = self.ev
-        ev.ev("10 11 >")
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_greater_than_when_true(self):
-        ev = self.ev
-        ev.ev("11 3 >")
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_do_less_than_when_false(self):
-        ev = self.ev
-        ev.ev("3 2")
-        ev.do_less_than()
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_do_less_than_when_true(self):
-        ev = self.ev
-        ev.ev("2 3")
-        ev.do_less_than()
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_less_than_when_false(self):
-        ev = self.ev
-        ev.ev("11 10 <")
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_less_than_when_true(self):
-        ev = self.ev
-        ev.ev("3 11 <")
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_do_equal_to_when_true(self):
-        ev = self.ev
-        ev.ev("3 3")
-        ev.do_equal_to()
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_do_equal_to_when_false(self):
-        ev = self.ev
-        ev.ev("1 3")
-        ev.do_equal_to()
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_equal_to_when_true(self):
-        ev = self.ev
-        ev.ev("11 11 =")
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_equal_to_when_false(self):
-        ev = self.ev
-        ev.ev("111 112 =")
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_do_not_equal_to_when_true(self):
-        ev = self.ev
-        ev.ev("3 4")
-        ev.do_not_equal_to()
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_do_not_equal_to_when_false(self):
-        ev = self.ev
-        ev.ev("3 3")
-        ev.do_not_equal_to()
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_not_equal_to_when_true(self):
-        ev = self.ev
-        ev.ev("11 12 !=")
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_not(self):
-        ev = self.ev
-        ev.ev("2 not")
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_not_when_false(self):
-        ev = self.ev
-        ev.ev("False not")
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_not_idempotent(self):
-        ev = self.ev
-        ev.ev("42 not not")
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_not_equal_to_when_false(self):
-        ev = self.ev
-        ev.ev("1 1 !=")
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_true(self):
-        with StringIO() as out, stdout_redirected(out):
-            ev = self.ev
-            ev.ev("true .")
-            actual = out.getvalue()
-        expected = "True"
-        assert expected in actual
-
-    def test_and_when_false(self):
-        ev = self.ev
-        ev.ev("True 2 3 > and")
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_and_when_true(self):
-        ev = self.ev
-        ev.ev("2 3 < 4 5 < and")
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_or_when_false(self):
-        ev = self.ev
-        ev.ev("True 2 3 > or")
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_or_when_true(self):
-        ev = self.ev
-        ev.ev("2 3 < 4 5 < or")
-        expected = True
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_xor_when_false(self):
-        ev = self.ev
-        ev.ev("False False xor")
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
-
-    def test_xor(self):
-        ev = self.ev
-        ev.ev("2 6 xor")
-        expected = False
-        actual = ev.pop().value
-        assert actual == expected
