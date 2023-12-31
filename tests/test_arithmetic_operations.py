@@ -23,6 +23,15 @@ def test_by_command(ev, test_input, expected):
     ev.ev(test_input)
     assert ev.pop().value == expected
 
+# Tests for absolute value
+@pytest.mark.parametrize("test_input, expected", [
+    ("0 abs", 0),
+    ("1 abs", 1),
+    ("-3.4 abs", 3.4)
+])
+def test_abs(ev, test_input, expected):
+    ev.ev(test_input)
+    assert ev.pop().value == expected
 
 # Tests for operations performed here in the test method
 @pytest.mark.parametrize("test_input,fname,expected", [

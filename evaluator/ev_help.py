@@ -19,7 +19,7 @@ function definitions.  It also allows save and restore operations.
    To exit from ev, type 'q';
 """,
         "topics": """
-Arithmetic operations:   +, -, *, /, %, /mod, **, 1+, 1-, int, sqrt
+Arithmetic operations:   +, -, *, /, %, /mod, **, 1+, 1-, abs, int, sqrt
 Commands:                help, load, quit, save, see, shell
 Configuration:           profile
 Constants:               e, pi
@@ -82,6 +82,9 @@ used by Hewlett Packard calculators.
         "1-": """
 1- :  Pops x from the stack, decrements it, and pushes it.
       '--' is a synonym for '1-'.
+""",
+        "abs": """
+abs:  Pops x from the stack and pushes its absolute value.
 """,
         "int": """
 int:  Pops x from the stack and pushes the integer

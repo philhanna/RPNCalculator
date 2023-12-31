@@ -141,6 +141,7 @@ class Evaluator:
             'TORADIANS': self.do_to_radians,
             'TODEGREES': self.do_to_degrees,
             '%': self.do_mod,
+            'ABS': self.do_abs,
             'MOD': self.do_mod,
             '/MOD': self.do_divmod,
             '**': self.do_pow,
@@ -208,6 +209,14 @@ class Evaluator:
                 raise e
             else:
                 print(errmsg)
+
+    @stack_needs(1)
+    def do_abs(self):
+        x = self.pop().value
+        if x < 0:
+            x = -x
+        x = NumberEntry(x)
+        self.push(x)
 
     @stack_needs(1)
     def do_acos(self):
