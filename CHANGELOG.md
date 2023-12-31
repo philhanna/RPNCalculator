@@ -7,7 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [1.10.0] - 2023-12-31
+
 ### Added 
+- Issue #24 - Added factorial function
+- Issue #23 - Added abs function
 - Converted unit tests to pytest
 - Issue #16 - Use pandas DataFrames for output of .F, .C, and .V
 - Issue #15 - Raise exceptions rather than just printing error messages
@@ -167,7 +171,8 @@ Added MIT license.
 
 First workable version, based on the Perl version.
 
-[Unreleased]: https://github.com/philhanna/RPNCalculator/compare/1.9.0..HEAD
+[Unreleased]: https://github.com/philhanna/RPNCalculator/compare/1.10.0..HEAD
+[1.10.0]: https://github.com/philhanna/RPNCalculator/compare/1.9.0..1.10.0
 [1.9.0]: https://github.com/philhanna/RPNCalculator/compare/1.8.0..1.9.0
 [1.8.0]: https://github.com/philhanna/RPNCalculator/compare/1.7.1..1.8.0
 [1.7.1]: https://github.com/philhanna/RPNCalculator/compare/1.7.0..1.7.1
