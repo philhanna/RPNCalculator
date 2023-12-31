@@ -33,6 +33,17 @@ def test_abs(ev, test_input, expected):
     ev.ev(test_input)
     assert ev.pop().value == expected
 
+# Tests for factorial
+@pytest.mark.parametrize("test_input, expected", [
+    ("0 fact", 1),
+    ("1 fact", 1),
+    ("7 fact", 5040),
+    ("50 fact", 3.0414093201713376e+64),
+])
+def test_fact(ev, test_input, expected):
+    ev.ev(test_input)
+    assert ev.pop().value == expected
+
 # Tests for operations performed here in the test method
 @pytest.mark.parametrize("test_input,fname,expected", [
     ("2 3", "do_add", 5),
@@ -52,6 +63,7 @@ def test_operation(ev, test_input, fname, expected):
     ("-3 sqrt", "negative"),
     ("-3 2 **", "Cannot exponentiate"),
     ("0 2 **", "Cannot exponentiate"),
+    ("-3 fact", "factorial of a negative number"),
 ])
 def tests_with_errors(ev, test_input, errmsg):
     with pytest.raises(RuntimeError) as ae:

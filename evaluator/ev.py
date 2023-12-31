@@ -4,7 +4,7 @@ import sys
 from pathlib import Path
 
 import pandas as pd
-from mpmath import acos, asin, atan, atan2, cos, exp, ln, log10, pi, power, sin, sqrt, tan, mp, mpf
+from mpmath import acos, asin, atan, atan2, cos, exp, factorial, ln, log10, mp, mpf, pi, power, sin, sqrt, tan
 
 from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE, StackEntry
 from evaluator.ev_help import EVHelp
@@ -35,6 +35,7 @@ class Evaluator:
         "CON_SAVED": "{} constant definitions saved to {}",
         "DIVIDE_BY_0": "Cannot divide by zero",
         "EMPTY": "Stack empty",
+        "FACTORIAL_OF_NEGATIVE": "Cannot take factorial of a negative number",
         "FUN_SAVED": "{} function definitions saved to {}",
         "INFINITY": "Number too large to represent",
         "NEGATIVE_BASE": "Cannot exponentiate the non-positive number {}",
@@ -147,6 +148,7 @@ class Evaluator:
             '**': self.do_pow,
             '^': self.do_pow,
             'INT': self.do_int,
+            'FACT': self.do_fact,
             'DEPTH': self.do_depth,
             'SHELL': self.do_shell,
             'TRUE': self.do_true,
@@ -351,6 +353,16 @@ class Evaluator:
         f1 = self.peek()
         self.push(f1)
 
+    @stack_needs(1)
+    def do_fact(self):
+        x = self.pop().value
+        if x < 0:
+            errmsg = Evaluator.MSG["FACTORIAL_OF_NEGATIVE"]
+            raise RuntimeError(errmsg)
+        y = factorial(x)
+        result = NumberEntry(y)
+        self.push(result)
+        
     @stack_needs(1)
     def do_exp(self):
         x = self.pop().value

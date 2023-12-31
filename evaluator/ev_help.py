@@ -19,7 +19,7 @@ function definitions.  It also allows save and restore operations.
    To exit from ev, type 'q';
 """,
         "topics": """
-Arithmetic operations:   +, -, *, /, %, /mod, **, 1+, 1-, abs, int, sqrt
+Arithmetic operations:   +, -, *, /, %, /mod, **, 1+, 1-, abs, int, fact, sqrt
 Commands:                help, load, quit, save, see, shell
 Configuration:           profile
 Constants:               e, pi
@@ -89,6 +89,9 @@ abs:  Pops x from the stack and pushes its absolute value.
         "int": """
 int:  Pops x from the stack and pushes the integer
       portion of x
+""",
+        "fact": """
+fact:  Pops x from the stack and pushes x factorial.
 """,
         "sqrt": """
 sqrt:  Pops x from the stack and pushes its square root.
