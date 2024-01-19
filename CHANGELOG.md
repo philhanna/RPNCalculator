@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [1.10.0] - 2023-12-31
+## [v1.10.0] - 2023-12-31
 
 ### Added 
 - Issue #24 - Added factorial function
@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Issue #16 - Use pandas DataFrames for output of .F, .C, and .V
 - Issue #15 - Raise exceptions rather than just printing error messages
 
-## [1.9.0] - 2022-11-15
+## [v1.9.0] - 2022-11-15
 
 ### Added
 - Added logical operators AND, OR, NOT, XOR
@@ -28,7 +28,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Prevented `import readline` from being optimized away.
 - Switched to `subprocess.run` instead of `os.system`.
 
-## [1.8.0] - 2022-10-22
+## [v1.8.0] - 2022-10-22
 
 ### Added
 
@@ -113,17 +113,17 @@ if kwd in full_line_commands:
 commands[token]()
 ```
 
-## [1.7.1] - 2022-09-19
+## [v1.7.1] - 2022-09-19
 
 Bug fix:
 
 - Issue #9 - Command line -c C does not include a way to quit
 
-## [1.7.0] - 2022-09-12
+## [v1.7.0] - 2022-09-12
 
 Added `/mod` (divmod) operator
 
-## [1.6.1] - 2022-08-28
+## [v1.6.1] - 2022-08-28
 
 Now using [mpmath](https://mpmath.org/) for real and complex floating-point arithmetic
 with arbitrary precision. This is controlled by the `digits &lt;n&gt;` command.
@@ -159,25 +159,25 @@ Increased unit test coverage by adding unit tests:
 
 Also updated help text to include the changes
 
-## [1.5.0] - 2022-08-20
+## [v1.5.0] - 2022-08-20
 
 Declared classes in `__init__.py` and added unit tests.
 
-## [1.4.0] - 2020-06-27
+## [v1.4.0] - 2020-06-27
 
 Added MIT license.
 
-## [1.3.0] - 2019-19-21
+## [v1.3.0] - 2019-19-21
 
 First workable version, based on the Perl version.
 
-[Unreleased]: https://github.com/philhanna/RPNCalculator/compare/1.10.0..HEAD
-[1.10.0]: https://github.com/philhanna/RPNCalculator/compare/1.9.0..1.10.0
-[1.9.0]: https://github.com/philhanna/RPNCalculator/compare/1.8.0..1.9.0
-[1.8.0]: https://github.com/philhanna/RPNCalculator/compare/1.7.1..1.8.0
-[1.7.1]: https://github.com/philhanna/RPNCalculator/compare/1.7.0..1.7.1
-[1.7.0]: https://github.com/philhanna/RPNCalculator/compare/1.6.1..1.7.0
-[1.6.1]: https://github.com/philhanna/RPNCalculator/compare/1.5.0..1.6.1
-[1.5.0]: https://github.com/philhanna/RPNCalculator/compare/1.4.0..1.5.0
-[1.4.0]: https://github.com/philhanna/RPNCalculator/compare/1.3.0..1.4.0
-[1.3.0]: https://github.com/philhanna/RPNCalculator/compare/81bb24..1.4.0
+[Unreleased]: https://github.com/philhanna/RPNCalculator/compare/v1.10.0..HEAD
+[v1.10.0]: https://github.com/philhanna/RPNCalculator/compare/v1.9.0..v1.10.0
+[v1.9.0]: https://github.com/philhanna/RPNCalculator/compare/v1.8.0..v1.9.0
+[v1.8.0]: https://github.com/philhanna/RPNCalculator/compare/v1.7.v1..1.8.0
+[v1.7.1]: https://github.com/philhanna/RPNCalculator/compare/v1.7.0..v1.7.1
+[v1.7.0]: https://github.com/philhanna/RPNCalculator/compare/v1.6.v1..1.7.0
+[v1.6.1]: https://github.com/philhanna/RPNCalculator/compare/v1.5.0..v1.6.1
+[v1.5.0]: https://github.com/philhanna/RPNCalculator/compare/v1.4.0..v1.5.0
+[v1.4.0]: https://github.com/philhanna/RPNCalculator/compare/v1.3.0..v1.4.0
+[v1.3.0]: https://github.com/philhanna/RPNCalculator/compare/81bb24..v1.3.0
