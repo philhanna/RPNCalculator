@@ -31,6 +31,7 @@ class Evaluator:
         "BAD_SEE": "SEE must be followed by a function name, a constant name, or a variable name",
         "BAD_SQRT": "Cannot take the square root of the negative number {}",
         "BAD_TOKEN": "Unrecognized token {}",
+        "BAD_TRIG_ARG": "Invalid trigonometric argument {}",
         "BAD_VARNUM": "Invalid memory reference, index={}",
         "CON_SAVED": "{} constant definitions saved to {}",
         "DIVIDE_BY_0": "Cannot divide by zero",
@@ -223,6 +224,9 @@ class Evaluator:
     @stack_needs(1)
     def do_acos(self):
         x = self.pop().value
+        if x < -1 or x > 1:
+            errmsg = Evaluator.MSG["BAD_TRIG_ARG"].format(x)
+            raise RuntimeError(errmsg)
         y = acos(x)
         result = NumberEntry(y)
         self.push(result)
@@ -247,13 +251,19 @@ class Evaluator:
     @stack_needs(1)
     def do_asin(self):
         x = self.pop().value
+        if x < -1 or x > 1:
+            errmsg = Evaluator.MSG["BAD_TRIG_ARG"].format(x)
+            raise RuntimeError(errmsg)
         y = asin(x)
         result = NumberEntry(y)
         self.push(result)
-
+ 
     @stack_needs(1)
     def do_atan(self):
         x = self.pop().value
+        if x < -1 or x > 1:
+            errmsg = Evaluator.MSG["BAD_TRIG_ARG"].format(x)
+            raise RuntimeError(errmsg)
         y = atan(x)
         result = NumberEntry(y)
         self.push(result)

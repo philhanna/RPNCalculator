@@ -20,3 +20,18 @@ def test_trigonometric_function(ev, test_input, expected):
     ev.ev(test_input)
     actual = ev.pop().value
     assert actual == expected
+
+def test_acos_bad(ev):
+    with pytest.raises(RuntimeError) as ae:
+        ev.ev("10 acos")
+    assert "10.0" in str(ae.value)
+
+def test_asin_bad(ev):
+    with pytest.raises(RuntimeError) as ae:
+        ev.ev("10 asin")
+    assert "10.0" in str(ae.value)
+
+def test_atan_bad(ev):
+    with pytest.raises(RuntimeError) as ae:
+        ev.ev("10 atan")
+    assert "10.0" in str(ae.value)

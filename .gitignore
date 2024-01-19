@@ -1,5 +1,7 @@
 *.swp
 .idea/
+.vscode/
+.coverage
 RPNCalculator.egg-info/
 build/
 dist/
