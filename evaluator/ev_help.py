@@ -27,7 +27,7 @@ Conversion functions:    toDegrees, toRadians
 Declaratives:            const, define, digits, var
 Log functions:           exp, ln, log
 Memory operations:       @, !
-Print functions:         ., .c, .f, .s, .v
+Print functions:         ., .c, .f, .h, .s, .v
 Stack functions:         clear, depth, drop, dup, over, rot, swap
 Trigonometric functions: acos, asin, atan, atan2, cos, sin, tan
 
@@ -263,6 +263,9 @@ log:  Pops x from the stack and pushes log(x), the base 10
 
      See also 'define'.
 """,
+        ".h": """
+.h:  Pops x from the stack and prints it in hexadecimal.
+"""
         ".s": """
 .s:  Prints the contents of the stack.  The stack level is not
      affected.  The display format is controlled by the current
