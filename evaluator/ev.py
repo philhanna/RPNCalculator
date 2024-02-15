@@ -451,7 +451,7 @@ class Evaluator:
         f1 = self.pop().value
         raw = hex(int(f1))
         suffix = raw[2:]
-        suffix = suffix.upper()
+        suffix = suffix.lower()
         print("0x" + suffix)
     
     @stack_needs(1)
