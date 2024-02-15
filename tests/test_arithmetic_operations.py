@@ -1,6 +1,6 @@
 import pytest
 from pytest import approx
-
+from evaluator import HexEntry
 
 # Tests for operations fully performed in the interpreter
 @pytest.mark.parametrize("test_input,expected", [
@@ -80,4 +80,10 @@ def test_empty_stack(ev, capsys):
 def test_hex_output(ev, capsys):
     ev.ev("30 .h")
     captured = capsys.readouterr()
-    assert "0x1E\n" == captured.out
+    assert "0x1e\n" == captured.out
+    
+def test_hex2dec():
+    x = "0x1e"
+    y = HexEntry.hex2dec(x)
+    assert y == 30
+    

@@ -6,7 +6,7 @@ from pathlib import Path
 import pandas as pd
 from mpmath import acos, asin, atan, atan2, cos, exp, factorial, ln, log10, mp, mpf, pi, power, sin, sqrt, tan
 
-from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE, StackEntry
+from evaluator import stack_needs, EXIT, NumberEntry, BooleanEntry, FALSE, TRUE, StackEntry, HexEntry
 from evaluator.ev_help import EVHelp
 
 assert readline is not None  # Do not delete this line - needed to
@@ -186,6 +186,9 @@ class Evaluator:
                     return EXIT
                 if self.is_numeric(token):
                     result = NumberEntry(token)
+                    self.push(result)
+                elif self.is_hex(token):
+                    result = HexEntry(token)
                     self.push(result)
                 elif token in self.variable:
                     result = self.variable[token]
@@ -848,6 +851,16 @@ class Evaluator:
         df = pd.DataFrame(data)
         print(df)
 
+    @staticmethod
+    def is_hex(arg):
+        arg = arg.lower()
+        if arg[:2] == "0x":
+            arg = arg[2:]
+        for c in arg:
+            if "0123456789abcdef".find(c) == -1:
+                return False
+        return True
+    
     @staticmethod
     def is_numeric(arg):
         try:

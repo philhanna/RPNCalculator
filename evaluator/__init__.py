@@ -28,7 +28,7 @@ def stack_needs(n):
         return wrapper
     return decorator
 
-from .stack_entry import StackEntry, NumberEntry, BooleanEntry
+from .stack_entry import StackEntry, NumberEntry, BooleanEntry, HexEntry
 TRUE = BooleanEntry(True)
 FALSE = BooleanEntry(False)
 from .ev import Evaluator
@@ -38,6 +38,7 @@ __all__ = [
     'StackEntry',
     'NumberEntry',
     'BooleanEntry',
+    'HexEntry',
     'TRUE',
     'FALSE',
     'get_version',

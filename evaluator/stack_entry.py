@@ -42,4 +42,23 @@ class BooleanEntry(StackEntry):
         return sb
 
 
+class HexEntry(StackEntry):
+    def __init__(self, value: str):
+        super().__init__(HexEntry.hex2dec(value))
 
+    def __repr__(self):
+        sb = f"{BooleanEntry.__name__}({self.value})"
+        return sb
+
+    @staticmethod
+    def hex2dec(s: str) -> int:
+        s = s.lower()
+        if s[:2] == '0x':
+            s = s[2:]
+        total = 0
+        for c in s:
+            d = "0123456789abcdef".find(c)
+            total *= 16
+            total += d
+        return total
+        
