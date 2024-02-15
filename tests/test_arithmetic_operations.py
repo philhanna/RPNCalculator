@@ -76,3 +76,8 @@ def test_empty_stack(ev, capsys):
     ev.do_add()
     captured = capsys.readouterr()
     assert "Stack empty" in captured.out
+
+def test_hex_output(ev, capsys):
+    ev.ev("30 .h")
+    captured = capsys.readouterr()
+    assert "0x1E\n" == captured.out

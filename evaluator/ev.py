@@ -109,6 +109,7 @@ class Evaluator:
             '@': self.do_fetch,
             '!': self.do_store,
             '.': self.do_print,
+            '.H': self.do_hex_print,
             '1-': self.do_decrement,
             '--': self.do_decrement,
             '1+': self.do_increment,
@@ -445,6 +446,14 @@ class Evaluator:
     def do_help(topic):
         EVHelp(topic.upper())
 
+    @stack_needs(1)
+    def do_hex_print(self):
+        f1 = self.pop().value
+        raw = hex(int(f1))
+        suffix = raw[2:]
+        suffix = suffix.upper()
+        print("0x" + suffix)
+    
     @stack_needs(1)
     def do_increment(self):
         f1 = self.pop().value
