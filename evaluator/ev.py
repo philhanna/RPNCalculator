@@ -854,8 +854,9 @@ class Evaluator:
     @staticmethod
     def is_hex(arg):
         arg = arg.lower()
-        if arg[:2] == "0x":
-            arg = arg[2:]
+        if arg[:2] != "0x": # Must start with 0x
+            return False
+        arg = arg[2:]
         for c in arg:
             if "0123456789abcdef".find(c) == -1:
                 return False
