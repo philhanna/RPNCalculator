@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='RPNCalculator',
-    version='1.10.1',
+    version='1.10.2',
     packages=['evaluator'],
     install_requires=[
         'mpmath',

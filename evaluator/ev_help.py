@@ -265,7 +265,7 @@ log:  Pops x from the stack and pushes log(x), the base 10
 """,
         ".h": """
 .h:  Pops x from the stack and prints it in hexadecimal.
-"""
+""",
         ".s": """
 .s:  Prints the contents of the stack.  The stack level is not
      affected.  The display format is controlled by the current
