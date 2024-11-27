@@ -25,6 +25,8 @@ After cloning the project from GitHub, run the command:
 cd <install_dir>
 pip install .
 ```
+**NOTE**: *This installation method apparently does not work with python3.12 on Ubuntu 24.04.1 LTS.
+I am investigating the problem.*
 
 Then copy the mainline `ev` to a directory in your path.
 
