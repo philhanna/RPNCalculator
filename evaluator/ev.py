@@ -38,13 +38,17 @@ class Evaluator:
         "EMPTY": "Stack empty",
         "FACTORIAL_OF_NEGATIVE": "Cannot take factorial of a negative number",
         "FUN_SAVED": "{} function definitions saved to {}",
+        "IF_NO_THEN": "IF without matching THEN",
         "INFINITY": "Number too large to represent",
+        "LOOP_NO_REPEAT": "BEGIN without matching REPEAT",
+        "LOOP_NO_WHILE": "BEGIN/REPEAT loop missing WHILE",
         "NEGATIVE_BASE": "Cannot exponentiate the non-positive number {}",
         "NO_DEFINE": "No function definition specified",
         "NO_DIGITS": "Number of digits not specified",
         "NO_FILENAME": "No file name specified",
         "NO_SAVE": "Nothing to save",
         "NONNUMERIC": "Constants must be numeric",
+        "UNEXPECTED_TOKEN": "Unexpected token: {}",
         "VAR_SAVED": "{} variable definitions saved to {}",
     }
 
@@ -57,27 +61,7 @@ class Evaluator:
         self.variable = {}
         self.memory = [-1]
         self.helptext = {}
-        ...
-
-    def ev(self, command) -> str | None:
-        """Evaluates input line"""
-        if not command or command.startswith('#'):
-            return
-
-        full_line_commands = {
-            'HELP': self.do_help,
-            'H': self.do_help,
-            '?': self.do_help,
-            'CONST': self.do_const,
-            'DEFINE': self.do_define,
-            'DIGITS': self.do_digits,
-            'LOAD': self.do_load,
-            'SAVE': self.do_save,
-            'VAR': self.do_variable,
-            'SEE': self.do_see,
-        }
-
-        commands = {
+        self._commands = {
             '@': self.do_fetch,
             '!': self.do_store,
             '.': self.do_print,
@@ -139,6 +123,25 @@ class Evaluator:
             'NOT': self.do_not,
             'XOR': self.do_xor,
         }
+        ...
+
+    def ev(self, command) -> str | None:
+        """Evaluates input line"""
+        if not command or command.startswith('#'):
+            return
+
+        full_line_commands = {
+            'HELP': self.do_help,
+            'H': self.do_help,
+            '?': self.do_help,
+            'CONST': self.do_const,
+            'DEFINE': self.do_define,
+            'DIGITS': self.do_digits,
+            'LOAD': self.do_load,
+            'SAVE': self.do_save,
+            'VAR': self.do_variable,
+            'SEE': self.do_see,
+        }
 
         #   Check for full line commands
         tokens = command.split()
@@ -150,40 +153,114 @@ class Evaluator:
                 full_line_commands[kwd](rest)
                 return
 
-            #   Evaluate each token
-            for token in tokens:
-                token = token.upper()
-                if token in ['Q', 'QUIT', 'EXIT']:
-                    return EXIT
-                if self.is_numeric(token):
-                    result = NumberEntry(token)
-                    self.push(result)
-                elif token in self.variable:
-                    result = self.variable[token]
-                    self.push(result)
-                elif token in self.constant:
-                    result = self.constant[token]
-                    self.push(result)
-                elif token in self.function:
-                    result = self.function[token]
-                    self.ev(result)
-                elif token == 'PI':
-                    result = NumberEntry(pi)
-                    self.push(result)
-                elif token == 'E':
-                    result = NumberEntry(mp.e)
-                    self.push(result)
-                elif token in commands:
-                    commands[token]()
-                else:
-                    errmsg = Evaluator.MSG["BAD_TOKEN"].format(token)
-                    raise RuntimeError(errmsg)
+            return self._ev_tokens(tokens)
         except RuntimeError as e:
-            errmsg = str(e)
             if self.debug:
                 raise e
             else:
-                print(errmsg)
+                print(str(e))
+
+    def _ev_tokens(self, tokens, start=0, end=None):
+        """Evaluate tokens[start:end], handling IF/ELSE/THEN and BEGIN/WHILE/REPEAT."""
+        if end is None:
+            end = len(tokens)
+
+        i = start
+        while i < end:
+            token = tokens[i].upper()
+
+            if token == 'IF':
+                else_pos, then_pos = self._find_if_end(tokens, i, end)
+                if not self.stack:
+                    raise RuntimeError(Evaluator.MSG["EMPTY"])
+                flag = self.pop().value
+                if flag:
+                    result = self._ev_tokens(tokens, i + 1, else_pos if else_pos is not None else then_pos)
+                else:
+                    result = self._ev_tokens(tokens, else_pos + 1, then_pos) if else_pos is not None else None
+                if result == EXIT:
+                    return EXIT
+                i = then_pos + 1
+
+            elif token == 'BEGIN':
+                while_pos, repeat_pos = self._find_loop_end(tokens, i, end)
+                while True:
+                    result = self._ev_tokens(tokens, i + 1, while_pos)
+                    if result == EXIT:
+                        return EXIT
+                    if not self.stack:
+                        raise RuntimeError(Evaluator.MSG["EMPTY"])
+                    flag = self.pop().value
+                    if not flag:
+                        break
+                    result = self._ev_tokens(tokens, while_pos + 1, repeat_pos)
+                    if result == EXIT:
+                        return EXIT
+                i = repeat_pos + 1
+
+            elif token in ('ELSE', 'THEN', 'WHILE', 'REPEAT'):
+                raise RuntimeError(Evaluator.MSG["UNEXPECTED_TOKEN"].format(token))
+
+            else:
+                result = self._eval_single_token(token)
+                if result == EXIT:
+                    return EXIT
+                i += 1
+
+    def _eval_single_token(self, token):
+        """Evaluate a single (already uppercased) token."""
+        if token in ('Q', 'QUIT', 'EXIT'):
+            return EXIT
+        if self.is_numeric(token):
+            self.push(NumberEntry(token))
+        elif token in self.variable:
+            self.push(self.variable[token])
+        elif token in self.constant:
+            self.push(self.constant[token])
+        elif token in self.function:
+            return self.ev(self.function[token])
+        elif token == 'PI':
+            self.push(NumberEntry(pi))
+        elif token == 'E':
+            self.push(NumberEntry(mp.e))
+        elif token in self._commands:
+            self._commands[token]()
+        else:
+            raise RuntimeError(Evaluator.MSG["BAD_TOKEN"].format(token))
+
+    def _find_if_end(self, tokens, if_pos, end):
+        """Return (else_pos_or_None, then_pos) for the IF at if_pos."""
+        depth = 1
+        else_pos = None
+        for i in range(if_pos + 1, end):
+            t = tokens[i].upper()
+            if t == 'IF':
+                depth += 1
+            elif t == 'THEN':
+                depth -= 1
+                if depth == 0:
+                    return else_pos, i
+            elif t == 'ELSE' and depth == 1:
+                else_pos = i
+        raise RuntimeError(Evaluator.MSG["IF_NO_THEN"])
+
+    def _find_loop_end(self, tokens, begin_pos, end):
+        """Return (while_pos, repeat_pos) for the BEGIN at begin_pos."""
+        depth = 1
+        while_pos = None
+        for i in range(begin_pos + 1, end):
+            t = tokens[i].upper()
+            if t == 'BEGIN':
+                depth += 1
+            elif t == 'REPEAT':
+                depth -= 1
+                if depth == 0:
+                    if while_pos is None:
+                        raise RuntimeError(Evaluator.MSG["LOOP_NO_WHILE"])
+                    return while_pos, i
+            elif t == 'WHILE' and depth == 1:
+                while_pos = i
+        raise RuntimeError(Evaluator.MSG["LOOP_NO_REPEAT"])
 
     @stack_needs(1)
     def do_abs(self):
