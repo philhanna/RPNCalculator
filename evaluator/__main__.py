@@ -1,6 +1,33 @@
 import argparse
 
-from evaluator import Evaluator, get_version
+from evaluator import EXIT, Evaluator, get_version
+
+
+def run(ev, args):
+    if not args.noprofile:
+        ev.load_profile()
+
+    if args.c:
+        rc = ev.ev(args.c)
+        if rc == EXIT:
+            return
+
+    while True:
+        fullline = ""
+        prompt = Evaluator.PROMPT
+        while True:
+            line = input(prompt)
+            if line.endswith("\\"):
+                line = line.rstrip("\\").rstrip() + " "
+                fullline += line
+                prompt = Evaluator.CONTINUATION_PROMPT
+            else:
+                fullline += line
+                break
+        rc = ev.ev(fullline)
+        if rc == EXIT:
+            return
+
 
 parser = argparse.ArgumentParser(description="""
 `ev` is an interactive programmable RPN calculator.  (Enter "help RPN"
@@ -24,4 +51,4 @@ parser.add_argument('--noprofile', action='store_true',
                     help='Do not load profile from .evrc')
 args = parser.parse_args()
 ev = Evaluator(debug=False)
-ev.run(args)
+run(ev, args)

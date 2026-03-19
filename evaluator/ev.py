@@ -59,34 +59,6 @@ class Evaluator:
         self.helptext = {}
         ...
 
-    def run(self, args):
-        #   Load the profile, if any
-        if not args.noprofile:
-            self.load_profile()
-
-        #   Run any command line tokens
-        if args.c:
-            rc = self.ev(args.c)
-            if rc == EXIT:
-                return
-
-        #   Main loop
-        while True:
-            fullline = ""
-            prompt = Evaluator.PROMPT
-            while True:
-                line = input(prompt)
-                if line.endswith("\\"):
-                    line = line.rstrip("\\").rstrip() + " "
-                    fullline += line
-                    prompt = Evaluator.CONTINUATION_PROMPT
-                else:
-                    fullline += line
-                    break
-            rc = self.ev(fullline)
-            if rc == EXIT:
-                return
-
     def ev(self, command) -> str | None:
         """Evaluates input line"""
         if not command or command.startswith('#'):
