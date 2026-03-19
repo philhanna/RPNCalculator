@@ -233,9 +233,6 @@ class Evaluator:
     @stack_needs(1)
     def do_atan(self):
         x = self.pop().value
-        if x < -1 or x > 1:
-            errmsg = Evaluator.MSG["BAD_TRIG_ARG"].format(x)
-            raise RuntimeError(errmsg)
         y = atan(x)
         result = NumberEntry(y)
         self.push(result)
