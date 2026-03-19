@@ -813,6 +813,9 @@ class Evaluator:
 
     @staticmethod
     def is_numeric(arg):
+        # '.' is the print command token, not a numeric literal.
+        if arg == '.':
+            return False
         try:
             mpf(arg)
             return True
