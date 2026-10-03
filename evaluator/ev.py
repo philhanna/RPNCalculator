@@ -75,7 +75,11 @@ class Evaluator:
             fullline = ""
             prompt = Evaluator.PROMPT
             while True:
-                line = input(prompt)
+                try:
+                    line = input(prompt)
+                except EOFError:
+                    print()
+                    return
                 if line.endswith("\\"):
                     line = line.rstrip("\\").rstrip() + " "
                     fullline += line
