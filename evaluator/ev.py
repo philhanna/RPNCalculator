@@ -864,6 +864,9 @@ class Evaluator:
     
     @staticmethod
     def is_numeric(arg):
+        # mpmath >= 1.4 parses a bare "." as 0.0, so require a digit
+        if not any(c.isdigit() for c in arg):
+            return False
         try:
             mpf(arg)
             return True

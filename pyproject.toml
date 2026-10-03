@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=65.1.0"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "RPNCalculator"
@@ -10,8 +10,9 @@ authors = [{ name = "Phil Hanna", email = "ph1204@gmail.com" }]
 license = { text = "MIT" }
 requires-python = ">=3.10"
 dependencies = [
-    "mpmath~=1.2.1",
-    "pandas~=1.5.1",
+    "mpmath>=1.2.1",
+    "pandas>=2.2",
+    "pytest>=7.2",
 ]
 
 [project.urls]
@@ -19,8 +20,3 @@ Homepage = "https://github.com/philhanna/RPNCalculator"
 
 [tool.setuptools]
 packages = ["evaluator"]
-
-[project.optional-dependencies]
-dev = [
-    "pytest~=7.2.0",
-]
