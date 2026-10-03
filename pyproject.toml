@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "RPNCalculator"
-version = "1.10.2"
+version = "1.10.3"
 description = "Reverse Polish notation calculator"
 authors = [{ name = "Phil Hanna", email = "ph1204@gmail.com" }]
 license = { text = "MIT" }

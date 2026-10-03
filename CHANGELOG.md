@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - Issue #26 - Hexadecimal input and output
 
+## [1.10.3] - 2026-10-03
+
+### Changed
+- Converted setup to pyproject.toml
+- Loosened dependency pins so the package installs on Python 3.14
+
+### Fixed
+- Invalid build backend (`setuptools.backends.legacy`) replaced with `setuptools.build_meta`
+- `.` (print) was parsed as the number 0 with mpmath >= 1.4
+- Ctrl-D (EOF) at the prompt now exits quietly instead of raising a traceback
+
 ## [v1.10.0] - 2023-12-31
 
 ### Added 
