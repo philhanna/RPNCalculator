@@ -2,18 +2,11 @@ EXIT = "EXIT"
 
 
 def get_version():
-    import re
-    import subprocess
-    version = None
-    cp = subprocess.run(['pip', 'show', 'RPNCalculator'], stdout=subprocess.PIPE)
-    if cp.returncode == 0:
-        output = str(cp.stdout, encoding='utf-8')
-        for token in output.split('\n'):
-            m = re.match(r'^Version: (.*)', token)
-            if m:
-                version = m.group(1)
-                break
-    return version
+    from importlib.metadata import version, PackageNotFoundError
+    try:
+        return version('RPNCalculator')
+    except PackageNotFoundError:
+        return None
 
 
 def stack_needs(n):

@@ -19,14 +19,18 @@ To exit from ev, type `q`
 
 ## Installation and setup
 
-After cloning the project from GitHub, run the command:
+After cloning the project from GitHub, create a virtual environment
+and install the project into it:
 
 ```bash
 cd <install_dir>
+python3 -m venv .venv
+source .venv/bin/activate      # On Windows: .venv\Scripts\activate
 pip install .
 ```
-**NOTE**: *This installation method apparently does not work with python3.12 on Ubuntu 24.04.1 LTS.
-I am investigating the problem.*
+
+To leave the virtual environment when you are finished, run `deactivate`.
+To use `ev` again later, re-run the `source .venv/bin/activate` command first.
 
 Then copy the mainline `ev` to a directory in your path.
 
