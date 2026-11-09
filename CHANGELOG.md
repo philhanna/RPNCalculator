@@ -8,6 +8,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 - Issue #26 - Hexadecimal input and output
 
+## [1.10.4] - 2026-11-08
+
+### Changed
+- README installation section now shows creating a virtual environment
+
+### Fixed
+- `ev` no longer prints a pip "Package(s) not found" warning at startup when run without the virtual environment activated; the version is now read with `importlib.metadata`
+
 ## [1.10.3] - 2026-10-03
 
 ### Changed
@@ -183,7 +191,8 @@ Added MIT license.
 
 First workable version, based on the Perl version.
 
-[Unreleased]: https://github.com/philhanna/RPNCalculator/compare/1.10.3..HEAD
+[Unreleased]: https://github.com/philhanna/RPNCalculator/compare/1.10.4..HEAD
+[1.10.4]: https://github.com/philhanna/RPNCalculator/compare/1.10.3..1.10.4
 [1.10.3]: https://github.com/philhanna/RPNCalculator/compare/1.10.0..1.10.3
 [1.10.0]: https://github.com/philhanna/RPNCalculator/compare/1.9.0..1.10.0
 [1.9.0]: https://github.com/philhanna/RPNCalculator/compare/1.8.0..1.9.0
